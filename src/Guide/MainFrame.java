@@ -64,7 +64,18 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     private void designTaskTop() {
-        jpnTaskTop.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.RED));
+        setMyButtonTop(btnBold, "src/Icon/bold.png");
+        setMyButtonTop(btnItalic, "src/Icon/italic.png");
+        setMyButtonTop(btnUnderLine, "src/Icon/underline.png");
+        setMyButtonTop(btnFind, "src/Icon/find.png");
+        setMyButtonTop(btnReplace, "src/Icon/replace.png");
+        setMyButtonTop(btnCode, "src/Icon/code.png");
+        setMyButtonTop(btnUndoNavigator, "src/Icon/undo.png");
+        setMyButtonTop(btnRedoNavigator, "src/Icon/redo.png");
+        setMyButtonTop(splite1, "src/Icon/splite.png");
+        setMyButtonTop(splite2, "src/Icon/splite.png");
+        setMyButtonTop(splite3, "src/Icon/splite.png");
+        btnRedo.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.RED));
     }
 
     private void setSortcutKey() {
@@ -148,6 +159,14 @@ public class MainFrame extends javax.swing.JFrame {
         button.setIcon(i);
     }
 
+    public void setMyButtonTop(JButton button, String pathIcon) {
+        button.setContentAreaFilled(false);
+        button.setBorder(new MyButton(0));
+        button.setForeground(Color.WHITE);
+        Icon i = new ImageIcon(pathIcon);
+        button.setIcon(i);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -161,7 +180,18 @@ public class MainFrame extends javax.swing.JFrame {
         btnNormalize = new javax.swing.JButton();
         btnZip = new javax.swing.JButton();
         btnSetting = new javax.swing.JButton();
-        jpnTaskTop = new javax.swing.JPanel();
+        btnRedo = new javax.swing.JPanel();
+        btnBold = new javax.swing.JButton();
+        btnItalic = new javax.swing.JButton();
+        btnUnderLine = new javax.swing.JButton();
+        btnFind = new javax.swing.JButton();
+        btnReplace = new javax.swing.JButton();
+        btnCode = new javax.swing.JButton();
+        btnUndoNavigator = new javax.swing.JButton();
+        btnRedoNavigator = new javax.swing.JButton();
+        splite1 = new javax.swing.JButton();
+        splite2 = new javax.swing.JButton();
+        splite3 = new javax.swing.JButton();
         jtpTable = new javax.swing.JTabbedPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -322,7 +352,7 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(btnNormalize)
                     .addComponent(btnZip)
                     .addComponent(btnSetting))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         jpnTaskLayout.setVerticalGroup(
             jpnTaskLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -346,19 +376,244 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap(307, Short.MAX_VALUE))
         );
 
-        jpnTaskTop.setBackground(new java.awt.Color(255, 255, 255));
+        btnRedo.setBackground(new java.awt.Color(255, 255, 255));
 
-        javax.swing.GroupLayout jpnTaskTopLayout = new javax.swing.GroupLayout(jpnTaskTop);
-        jpnTaskTop.setLayout(jpnTaskTopLayout);
-        jpnTaskTopLayout.setHorizontalGroup(
-            jpnTaskTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 840, Short.MAX_VALUE)
+        btnBold.setToolTipText("");
+        btnBold.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                btnBoldMouseMoved(evt);
+            }
+        });
+        btnBold.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnBoldMouseExited(evt);
+            }
+        });
+        btnBold.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBoldActionPerformed(evt);
+            }
+        });
+
+        btnItalic.setToolTipText("");
+        btnItalic.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                btnItalicMouseMoved(evt);
+            }
+        });
+        btnItalic.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnItalicMouseExited(evt);
+            }
+        });
+        btnItalic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnItalicActionPerformed(evt);
+            }
+        });
+
+        btnUnderLine.setToolTipText("");
+        btnUnderLine.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                btnUnderLineMouseMoved(evt);
+            }
+        });
+        btnUnderLine.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnUnderLineMouseExited(evt);
+            }
+        });
+        btnUnderLine.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUnderLineActionPerformed(evt);
+            }
+        });
+
+        btnFind.setToolTipText("");
+        btnFind.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                btnFindMouseMoved(evt);
+            }
+        });
+        btnFind.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnFindMouseExited(evt);
+            }
+        });
+        btnFind.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFindActionPerformed(evt);
+            }
+        });
+
+        btnReplace.setToolTipText("");
+        btnReplace.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                btnReplaceMouseMoved(evt);
+            }
+        });
+        btnReplace.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnReplaceMouseExited(evt);
+            }
+        });
+        btnReplace.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReplaceActionPerformed(evt);
+            }
+        });
+
+        btnCode.setToolTipText("");
+        btnCode.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                btnCodeMouseMoved(evt);
+            }
+        });
+        btnCode.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnCodeMouseExited(evt);
+            }
+        });
+        btnCode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCodeActionPerformed(evt);
+            }
+        });
+
+        btnUndoNavigator.setToolTipText("");
+        btnUndoNavigator.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                btnUndoNavigatorMouseMoved(evt);
+            }
+        });
+        btnUndoNavigator.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnUndoNavigatorMouseExited(evt);
+            }
+        });
+        btnUndoNavigator.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUndoNavigatorActionPerformed(evt);
+            }
+        });
+
+        btnRedoNavigator.setToolTipText("");
+        btnRedoNavigator.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                btnRedoNavigatorMouseMoved(evt);
+            }
+        });
+        btnRedoNavigator.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnRedoNavigatorMouseExited(evt);
+            }
+        });
+        btnRedoNavigator.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRedoNavigatorActionPerformed(evt);
+            }
+        });
+
+        splite1.setToolTipText("");
+        splite1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                splite1MouseMoved(evt);
+            }
+        });
+        splite1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                splite1MouseExited(evt);
+            }
+        });
+        splite1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                splite1ActionPerformed(evt);
+            }
+        });
+
+        splite2.setToolTipText("");
+        splite2.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                splite2MouseMoved(evt);
+            }
+        });
+        splite2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                splite2MouseExited(evt);
+            }
+        });
+        splite2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                splite2ActionPerformed(evt);
+            }
+        });
+
+        splite3.setToolTipText("");
+        splite3.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                splite3MouseMoved(evt);
+            }
+        });
+        splite3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                splite3MouseExited(evt);
+            }
+        });
+        splite3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                splite3ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout btnRedoLayout = new javax.swing.GroupLayout(btnRedo);
+        btnRedo.setLayout(btnRedoLayout);
+        btnRedoLayout.setHorizontalGroup(
+            btnRedoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnRedoLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(btnBold)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnItalic)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnUnderLine)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(splite1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnFind)
+                .addGap(18, 18, 18)
+                .addComponent(btnReplace)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(splite2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnUndoNavigator)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnRedoNavigator)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(splite3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnCode)
+                .addContainerGap(341, Short.MAX_VALUE))
         );
-        jpnTaskTopLayout.setVerticalGroup(
-            jpnTaskTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 45, Short.MAX_VALUE)
+        btnRedoLayout.setVerticalGroup(
+            btnRedoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnRedoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(btnRedoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(splite3)
+                    .addComponent(splite2)
+                    .addComponent(splite1)
+                    .addComponent(btnRedoNavigator)
+                    .addComponent(btnUndoNavigator)
+                    .addComponent(btnCode)
+                    .addComponent(btnReplace)
+                    .addComponent(btnFind)
+                    .addComponent(btnUnderLine)
+                    .addComponent(btnItalic)
+                    .addComponent(btnBold))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jtpTable.setBackground(new java.awt.Color(255, 255, 255));
         jtpTable.setFont(new java.awt.Font("Lato", 0, 11)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -369,13 +624,13 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(jpnTask, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jpnTaskTop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnRedo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jtpTable)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jpnTaskTop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnRedo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jtpTable)
                 .addContainerGap())
@@ -539,6 +794,138 @@ public class MainFrame extends javax.swing.JFrame {
         jpnTask.setBackground(new Color(252, 200, 196));
     }//GEN-LAST:event_jpnTaskMouseMoved
 
+    private void btnBoldMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBoldMouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBoldMouseMoved
+
+    private void btnBoldMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBoldMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBoldMouseExited
+
+    private void btnBoldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBoldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBoldActionPerformed
+
+    private void btnItalicMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnItalicMouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnItalicMouseMoved
+
+    private void btnItalicMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnItalicMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnItalicMouseExited
+
+    private void btnItalicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnItalicActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnItalicActionPerformed
+
+    private void btnUnderLineMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUnderLineMouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnUnderLineMouseMoved
+
+    private void btnUnderLineMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUnderLineMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnUnderLineMouseExited
+
+    private void btnUnderLineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnderLineActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnUnderLineActionPerformed
+
+    private void btnFindMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFindMouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnFindMouseMoved
+
+    private void btnFindMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFindMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnFindMouseExited
+
+    private void btnFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnFindActionPerformed
+
+    private void btnReplaceMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReplaceMouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnReplaceMouseMoved
+
+    private void btnReplaceMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReplaceMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnReplaceMouseExited
+
+    private void btnReplaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReplaceActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnReplaceActionPerformed
+
+    private void btnCodeMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCodeMouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCodeMouseMoved
+
+    private void btnCodeMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCodeMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCodeMouseExited
+
+    private void btnCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCodeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCodeActionPerformed
+
+    private void btnUndoNavigatorMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUndoNavigatorMouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnUndoNavigatorMouseMoved
+
+    private void btnUndoNavigatorMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUndoNavigatorMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnUndoNavigatorMouseExited
+
+    private void btnUndoNavigatorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUndoNavigatorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnUndoNavigatorActionPerformed
+
+    private void btnRedoNavigatorMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRedoNavigatorMouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRedoNavigatorMouseMoved
+
+    private void btnRedoNavigatorMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRedoNavigatorMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRedoNavigatorMouseExited
+
+    private void btnRedoNavigatorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRedoNavigatorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRedoNavigatorActionPerformed
+
+    private void splite1MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_splite1MouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_splite1MouseMoved
+
+    private void splite1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_splite1MouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_splite1MouseExited
+
+    private void splite1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_splite1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_splite1ActionPerformed
+
+    private void splite2MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_splite2MouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_splite2MouseMoved
+
+    private void splite2MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_splite2MouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_splite2MouseExited
+
+    private void splite2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_splite2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_splite2ActionPerformed
+
+    private void splite3MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_splite3MouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_splite3MouseMoved
+
+    private void splite3MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_splite3MouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_splite3MouseExited
+
+    private void splite3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_splite3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_splite3ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -576,16 +963,27 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBold;
     private javax.swing.JButton btnClose;
+    private javax.swing.JButton btnCode;
+    private javax.swing.JButton btnFind;
+    private javax.swing.JButton btnItalic;
     private javax.swing.JButton btnNew;
     private javax.swing.JButton btnNormalize;
     private javax.swing.JButton btnOpen;
+    private javax.swing.JPanel btnRedo;
+    private javax.swing.JButton btnRedoNavigator;
+    private javax.swing.JButton btnReplace;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSaveAs;
     private javax.swing.JButton btnSetting;
+    private javax.swing.JButton btnUnderLine;
+    private javax.swing.JButton btnUndoNavigator;
     private javax.swing.JButton btnZip;
     private javax.swing.JPanel jpnTask;
-    private javax.swing.JPanel jpnTaskTop;
     private javax.swing.JTabbedPane jtpTable;
+    private javax.swing.JButton splite1;
+    private javax.swing.JButton splite2;
+    private javax.swing.JButton splite3;
     // End of variables declaration//GEN-END:variables
 }
