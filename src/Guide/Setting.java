@@ -242,7 +242,6 @@ public class Setting extends javax.swing.JFrame {
             if (!mainFrame.hashMap.isEmpty()) {
                 File file = mainFrame.hashMap.get(textPane);
                 cbbFontName.setSelectedIndex(5);
-
             }
         }
     }

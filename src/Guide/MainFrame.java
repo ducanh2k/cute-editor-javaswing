@@ -807,7 +807,9 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBoldMouseExited
 
     private void btnBoldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBoldActionPerformed
-        // TODO add your handling code here:
+        Find find = new Find(this, false);
+        find.setLocationRelativeTo(this);
+        find.setVisible(true);
     }//GEN-LAST:event_btnBoldActionPerformed
 
     private void btnItalicMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnItalicMouseMoved
@@ -867,7 +869,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCodeMouseExited
 
     private void btnCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCodeActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_btnCodeActionPerformed
 
     private void btnUndoNavigatorMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUndoNavigatorMouseMoved
