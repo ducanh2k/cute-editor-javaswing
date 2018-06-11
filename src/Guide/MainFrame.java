@@ -17,8 +17,10 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
+import javax.swing.JViewport;
 import javax.swing.KeyStroke;
 import javax.swing.text.DefaultEditorKit;
 
@@ -27,7 +29,7 @@ import javax.swing.text.DefaultEditorKit;
  * @author THAYCACAC
  */
 public class MainFrame extends javax.swing.JFrame {
-    
+
     int countFile = 0;
     HashMap<JTextPane, File> hashMap;
 
@@ -35,7 +37,7 @@ public class MainFrame extends javax.swing.JFrame {
     Action copy = new DefaultEditorKit.CopyAction();
     Action paste = new DefaultEditorKit.PasteAction();
     Action cut = new DefaultEditorKit.CutAction();
-    
+
     public MainFrame() {
         this.getContentPane().setBackground(new Color(254, 242, 241));
         initComponents();
@@ -44,9 +46,9 @@ public class MainFrame extends javax.swing.JFrame {
         designTaskTop();
         setSortcutKey();
         hashMap = new HashMap<>();
-        
+
     }
-    
+
     private void designTask() {
         setMyButton(btnNew, "src/Icon/new-file.png");
         setMyButton(btnOpen, "src/Icon/open-file.png");
@@ -59,11 +61,11 @@ public class MainFrame extends javax.swing.JFrame {
         jpnTask.setBorder(BorderFactory.createMatteBorder(0, 3, 0, 0, Color.RED));
         jpnTask.setBackground(new Color(252, 200, 196));
     }
-    
+
     private void designText() {
         jtpTable.setBorder(null);
     }
-    
+
     private void designTaskTop() {
         setMyButtonTop(btnBold, "src/Icon/bold.png");
         setMyButtonTop(btnItalic, "src/Icon/italic.png");
@@ -78,7 +80,7 @@ public class MainFrame extends javax.swing.JFrame {
         setMyButtonTop(splite3, "src/Icon/splite.png");
         btnRedo.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.RED));
     }
-    
+
     private void setSortcutKey() {
         //new file
         Action newFile = new AbstractAction("New File") {
@@ -151,7 +153,7 @@ public class MainFrame extends javax.swing.JFrame {
         btnClose.getActionMap().put("Close File", closeFile);
         btnClose.addActionListener(closeFile);
     }
-    
+
     public void setMyButton(JButton button, String pathIcon) {
         button.setContentAreaFilled(false);
         button.setBorder(new MyButton(2));
@@ -159,7 +161,7 @@ public class MainFrame extends javax.swing.JFrame {
         Icon i = new ImageIcon(pathIcon);
         button.setIcon(i);
     }
-    
+
     public void setMyButtonTop(JButton button, String pathIcon) {
         button.setContentAreaFilled(false);
         button.setBorder(new MyButton(0));
@@ -167,7 +169,7 @@ public class MainFrame extends javax.swing.JFrame {
         Icon i = new ImageIcon(pathIcon);
         button.setIcon(i);
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -747,6 +749,13 @@ public class MainFrame extends javax.swing.JFrame {
         Font font = new Font("Verdana", Font.BOLD, 12);
         btnNormalize.setForeground(new Color(114, 16, 6));
         btnNormalize.setFont(font);
+        if (jtpTable.getTabCount() > 0) {
+            JTextPane textPane = getCurrentTextPane(jtpTable);
+            String content = textPane.getText();
+            Normalize normalize = new Normalize(content);
+            content = normalize.normalize();
+            textPane.setText(content);
+        }
     }//GEN-LAST:event_btnNormalizeActionPerformed
 
     private void btnZipMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnZipMouseMoved
@@ -807,7 +816,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBoldMouseExited
 
     private void btnBoldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBoldActionPerformed
-        Find find = new Find(this, false);
+        Replace find = new Replace(this, false);
         find.setLocationRelativeTo(this);
         find.setVisible(true);
     }//GEN-LAST:event_btnBoldActionPerformed
@@ -869,7 +878,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCodeMouseExited
 
     private void btnCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCodeActionPerformed
-        
+
     }//GEN-LAST:event_btnCodeActionPerformed
 
     private void btnUndoNavigatorMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUndoNavigatorMouseMoved
@@ -967,9 +976,21 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
     }
-    
+
     public JTabbedPane getJtpTable() {
         return jtpTable;
+    }
+
+    //get current text pane
+    public JTextPane getCurrentTextPane(JTabbedPane jtpTable) {
+        JTextPane currentTextPane = null;
+        int index = jtpTable.getSelectedIndex();
+        if (index >= 0) {
+            JScrollPane scrollPane = (JScrollPane) jtpTable.getSelectedComponent();
+            JViewport viewport = scrollPane.getViewport();
+            currentTextPane = (JTextPane) viewport.getView();
+        }
+        return currentTextPane;
     }
 
 
