@@ -29,26 +29,28 @@ import javax.swing.text.DefaultEditorKit;
  * @author THAYCACAC
  */
 public class MainFrame extends javax.swing.JFrame {
-
+    
     int countFile = 0;
     HashMap<JTextPane, File> hashMap;
+    Thread thread;
 
     //action cut, copy, paste
     Action copy = new DefaultEditorKit.CopyAction();
     Action paste = new DefaultEditorKit.PasteAction();
     Action cut = new DefaultEditorKit.CutAction();
-
+    
     public MainFrame() {
         this.getContentPane().setBackground(new Color(254, 242, 241));
+        this.setTitle("CUTE EDITOR");
         initComponents();
         designTask();
         designText();
         designTaskTop();
         setSortcutKey();
         hashMap = new HashMap<>();
-
+        
     }
-
+    
     private void designTask() {
         setMyButton(btnNew, "src/Icon/new-file.png");
         setMyButton(btnOpen, "src/Icon/open-file.png");
@@ -61,11 +63,11 @@ public class MainFrame extends javax.swing.JFrame {
         jpnTask.setBorder(BorderFactory.createMatteBorder(0, 3, 0, 0, Color.RED));
         jpnTask.setBackground(new Color(252, 200, 196));
     }
-
+    
     private void designText() {
         jtpTable.setBorder(null);
     }
-
+    
     private void designTaskTop() {
         setMyButtonTop(btnBold, "src/Icon/bold.png");
         setMyButtonTop(btnItalic, "src/Icon/italic.png");
@@ -75,12 +77,16 @@ public class MainFrame extends javax.swing.JFrame {
         setMyButtonTop(btnCode, "src/Icon/code.png");
         setMyButtonTop(btnUndoNavigator, "src/Icon/undo.png");
         setMyButtonTop(btnRedoNavigator, "src/Icon/redo.png");
+        setMyButtonTop(btnH1, "src/Icon/h1.png");
+        setMyButtonTop(btnH3, "src/Icon/h3.png");
+        setMyButtonTop(btnH2, "src/Icon/h2.png");
         setMyButtonTop(splite1, "src/Icon/splite.png");
         setMyButtonTop(splite2, "src/Icon/splite.png");
         setMyButtonTop(splite3, "src/Icon/splite.png");
+        setMyButtonTop(splite4, "src/Icon/splite.png");
         btnRedo.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.RED));
     }
-
+    
     private void setSortcutKey() {
         //new file
         Action newFile = new AbstractAction("New File") {
@@ -153,7 +159,7 @@ public class MainFrame extends javax.swing.JFrame {
         btnClose.getActionMap().put("Close File", closeFile);
         btnClose.addActionListener(closeFile);
     }
-
+    
     public void setMyButton(JButton button, String pathIcon) {
         button.setContentAreaFilled(false);
         button.setBorder(new MyButton(2));
@@ -161,7 +167,7 @@ public class MainFrame extends javax.swing.JFrame {
         Icon i = new ImageIcon(pathIcon);
         button.setIcon(i);
     }
-
+    
     public void setMyButtonTop(JButton button, String pathIcon) {
         button.setContentAreaFilled(false);
         button.setBorder(new MyButton(0));
@@ -169,7 +175,15 @@ public class MainFrame extends javax.swing.JFrame {
         Icon i = new ImageIcon(pathIcon);
         button.setIcon(i);
     }
-
+    
+    public void setMyButtonTopMouse(JButton button, String pathIcon) {
+        button.setContentAreaFilled(false);
+        button.setBorder(new MyButton(0));
+        button.setForeground(Color.WHITE);
+        Icon i = new ImageIcon(pathIcon);
+        button.setIcon(i);
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -195,6 +209,10 @@ public class MainFrame extends javax.swing.JFrame {
         splite1 = new javax.swing.JButton();
         splite2 = new javax.swing.JButton();
         splite3 = new javax.swing.JButton();
+        splite4 = new javax.swing.JButton();
+        btnH1 = new javax.swing.JButton();
+        btnH3 = new javax.swing.JButton();
+        btnH2 = new javax.swing.JButton();
         jtpTable = new javax.swing.JTabbedPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -376,7 +394,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(btnSetting)
                 .addGap(18, 18, 18)
                 .addComponent(btnClose)
-                .addContainerGap(307, Short.MAX_VALUE))
+                .addContainerGap(311, Short.MAX_VALUE))
         );
 
         btnRedo.setBackground(new java.awt.Color(255, 255, 255));
@@ -568,51 +586,132 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        splite4.setToolTipText("");
+        splite4.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                splite4MouseMoved(evt);
+            }
+        });
+        splite4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                splite4MouseExited(evt);
+            }
+        });
+        splite4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                splite4ActionPerformed(evt);
+            }
+        });
+
+        btnH1.setToolTipText("");
+        btnH1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                btnH1MouseMoved(evt);
+            }
+        });
+        btnH1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnH1MouseExited(evt);
+            }
+        });
+        btnH1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnH1ActionPerformed(evt);
+            }
+        });
+
+        btnH3.setToolTipText("");
+        btnH3.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                btnH3MouseMoved(evt);
+            }
+        });
+        btnH3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnH3MouseExited(evt);
+            }
+        });
+        btnH3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnH3ActionPerformed(evt);
+            }
+        });
+
+        btnH2.setToolTipText("");
+        btnH2.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                btnH2MouseMoved(evt);
+            }
+        });
+        btnH2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnH2MouseExited(evt);
+            }
+        });
+        btnH2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnH2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout btnRedoLayout = new javax.swing.GroupLayout(btnRedo);
         btnRedo.setLayout(btnRedoLayout);
         btnRedoLayout.setHorizontalGroup(
             btnRedoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(btnRedoLayout.createSequentialGroup()
-                .addGap(18, 18, 18)
+                .addContainerGap()
                 .addComponent(btnBold)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnItalic)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnUnderLine)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(splite1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnFind)
                 .addGap(18, 18, 18)
+                .addComponent(splite4)
+                .addGap(18, 18, 18)
+                .addComponent(btnH1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnH2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnH3)
+                .addGap(18, 18, 18)
+                .addComponent(splite1)
+                .addGap(18, 18, 18)
+                .addComponent(btnFind)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnReplace)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(splite2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(btnUndoNavigator)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnRedoNavigator)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(splite3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(btnCode)
-                .addContainerGap(341, Short.MAX_VALUE))
+                .addContainerGap(121, Short.MAX_VALUE))
         );
         btnRedoLayout.setVerticalGroup(
             btnRedoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(btnRedoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(btnRedoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(splite3)
-                    .addComponent(splite2)
-                    .addComponent(splite1)
-                    .addComponent(btnRedoNavigator)
-                    .addComponent(btnUndoNavigator)
-                    .addComponent(btnCode)
-                    .addComponent(btnReplace)
-                    .addComponent(btnFind)
-                    .addComponent(btnUnderLine)
-                    .addComponent(btnItalic)
-                    .addComponent(btnBold))
+                    .addComponent(btnH3)
+                    .addGroup(btnRedoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(btnH1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnH2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(splite4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(splite3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(splite2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(splite1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnRedoNavigator, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnUndoNavigator, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnReplace, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnFind, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnItalic, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnBold, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnUnderLine, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -808,25 +907,23 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jpnTaskMouseMoved
 
     private void btnBoldMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBoldMouseMoved
-        // TODO add your handling code here:
+        setMyButtonTopMouse(btnBold, "src/Icon/bold-mouse.png");
     }//GEN-LAST:event_btnBoldMouseMoved
 
     private void btnBoldMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBoldMouseExited
-        // TODO add your handling code here:
+        setMyButtonTopMouse(btnBold, "src/Icon/bold.png");
     }//GEN-LAST:event_btnBoldMouseExited
 
     private void btnBoldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBoldActionPerformed
-        Replace find = new Replace(this, false);
-        find.setLocationRelativeTo(this);
-        find.setVisible(true);
+
     }//GEN-LAST:event_btnBoldActionPerformed
 
     private void btnItalicMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnItalicMouseMoved
-        // TODO add your handling code here:
+        setMyButtonTopMouse(btnItalic, "src/Icon/italic-mouse.png");
     }//GEN-LAST:event_btnItalicMouseMoved
 
     private void btnItalicMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnItalicMouseExited
-        // TODO add your handling code here:
+        setMyButtonTopMouse(btnItalic, "src/Icon/italic.png");
     }//GEN-LAST:event_btnItalicMouseExited
 
     private void btnItalicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnItalicActionPerformed
@@ -834,11 +931,11 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnItalicActionPerformed
 
     private void btnUnderLineMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUnderLineMouseMoved
-        // TODO add your handling code here:
+        setMyButtonTopMouse(btnUnderLine, "src/Icon/underline-mouse.png");
     }//GEN-LAST:event_btnUnderLineMouseMoved
 
     private void btnUnderLineMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUnderLineMouseExited
-        // TODO add your handling code here:
+        setMyButtonTopMouse(btnUnderLine, "src/Icon/underline.png");
     }//GEN-LAST:event_btnUnderLineMouseExited
 
     private void btnUnderLineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnderLineActionPerformed
@@ -846,35 +943,39 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUnderLineActionPerformed
 
     private void btnFindMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFindMouseMoved
-        // TODO add your handling code here:
+        setMyButtonTopMouse(btnFind, "src/Icon/find-mouse.png");
     }//GEN-LAST:event_btnFindMouseMoved
 
     private void btnFindMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFindMouseExited
-        // TODO add your handling code here:
+        setMyButtonTopMouse(btnFind, "src/Icon/find.png");
     }//GEN-LAST:event_btnFindMouseExited
 
     private void btnFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindActionPerformed
-        // TODO add your handling code here:
+        Find find = new Find(this, false);
+        find.setLocationRelativeTo(this);
+        find.setVisible(true);
     }//GEN-LAST:event_btnFindActionPerformed
 
     private void btnReplaceMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReplaceMouseMoved
-        // TODO add your handling code here:
+        setMyButtonTopMouse(btnReplace, "src/Icon/replace-mouse.png");
     }//GEN-LAST:event_btnReplaceMouseMoved
 
     private void btnReplaceMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReplaceMouseExited
-        // TODO add your handling code here:
+        setMyButtonTop(btnReplace, "src/Icon/replace.png");
     }//GEN-LAST:event_btnReplaceMouseExited
 
     private void btnReplaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReplaceActionPerformed
-        // TODO add your handling code here:
+        Replace replace = new Replace(this, false);
+        replace.setLocationRelativeTo(this);
+        replace.setVisible(true);
     }//GEN-LAST:event_btnReplaceActionPerformed
 
     private void btnCodeMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCodeMouseMoved
-        // TODO add your handling code here:
+        setMyButtonTopMouse(btnCode, "src/Icon/code-mouse.png");
     }//GEN-LAST:event_btnCodeMouseMoved
 
     private void btnCodeMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCodeMouseExited
-        // TODO add your handling code here:
+        setMyButtonTopMouse(btnCode, "src/Icon/code.png");
     }//GEN-LAST:event_btnCodeMouseExited
 
     private void btnCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCodeActionPerformed
@@ -882,11 +983,11 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCodeActionPerformed
 
     private void btnUndoNavigatorMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUndoNavigatorMouseMoved
-        // TODO add your handling code here:
+        setMyButtonTopMouse(btnUndoNavigator, "src/Icon/undo-mouse.png");
     }//GEN-LAST:event_btnUndoNavigatorMouseMoved
 
     private void btnUndoNavigatorMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUndoNavigatorMouseExited
-        // TODO add your handling code here:
+        setMyButtonTopMouse(btnUndoNavigator, "src/Icon/undo.png");
     }//GEN-LAST:event_btnUndoNavigatorMouseExited
 
     private void btnUndoNavigatorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUndoNavigatorActionPerformed
@@ -894,11 +995,11 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUndoNavigatorActionPerformed
 
     private void btnRedoNavigatorMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRedoNavigatorMouseMoved
-        // TODO add your handling code here:
+        setMyButtonTopMouse(btnRedoNavigator, "src/Icon/redo-mouse.png");
     }//GEN-LAST:event_btnRedoNavigatorMouseMoved
 
     private void btnRedoNavigatorMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRedoNavigatorMouseExited
-        // TODO add your handling code here:
+        setMyButtonTopMouse(btnRedoNavigator, "src/Icon/redo.png");
     }//GEN-LAST:event_btnRedoNavigatorMouseExited
 
     private void btnRedoNavigatorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRedoNavigatorActionPerformed
@@ -941,6 +1042,54 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_splite3ActionPerformed
 
+    private void splite4MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_splite4MouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_splite4MouseMoved
+
+    private void splite4MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_splite4MouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_splite4MouseExited
+
+    private void splite4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_splite4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_splite4ActionPerformed
+
+    private void btnH1MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnH1MouseMoved
+        setMyButtonTopMouse(btnH1, "src/Icon/h1-mouse.png");
+    }//GEN-LAST:event_btnH1MouseMoved
+
+    private void btnH1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnH1MouseExited
+        setMyButtonTopMouse(btnH1, "src/Icon/h1.png");
+    }//GEN-LAST:event_btnH1MouseExited
+
+    private void btnH1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnH1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnH1ActionPerformed
+
+    private void btnH3MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnH3MouseMoved
+        setMyButtonTopMouse(btnH3, "src/Icon/h3-mouse.png");
+    }//GEN-LAST:event_btnH3MouseMoved
+
+    private void btnH3MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnH3MouseExited
+        setMyButtonTopMouse(btnH3, "src/Icon/h3.png");
+    }//GEN-LAST:event_btnH3MouseExited
+
+    private void btnH3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnH3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnH3ActionPerformed
+
+    private void btnH2MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnH2MouseMoved
+        setMyButtonTopMouse(btnH2, "src/Icon/h2-mouse.png");
+    }//GEN-LAST:event_btnH2MouseMoved
+
+    private void btnH2MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnH2MouseExited
+        setMyButtonTopMouse(btnH2, "src/Icon/h2.png");
+    }//GEN-LAST:event_btnH2MouseExited
+
+    private void btnH2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnH2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnH2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -976,7 +1125,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
     }
-
+    
     public JTabbedPane getJtpTable() {
         return jtpTable;
     }
@@ -999,6 +1148,9 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnCode;
     private javax.swing.JButton btnFind;
+    private javax.swing.JButton btnH1;
+    private javax.swing.JButton btnH2;
+    private javax.swing.JButton btnH3;
     private javax.swing.JButton btnItalic;
     private javax.swing.JButton btnNew;
     private javax.swing.JButton btnNormalize;
@@ -1017,5 +1169,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton splite1;
     private javax.swing.JButton splite2;
     private javax.swing.JButton splite3;
+    private javax.swing.JButton splite4;
     // End of variables declaration//GEN-END:variables
 }
