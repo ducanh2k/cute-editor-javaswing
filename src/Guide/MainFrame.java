@@ -22,14 +22,20 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
 import javax.swing.JViewport;
 import javax.swing.KeyStroke;
+import javax.swing.text.AttributeSet;
 import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.Element;
+import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 /**
  *
  * @author THAYCACAC
  */
 public class MainFrame extends javax.swing.JFrame {
-    
+
     int countFile = 0;
     HashMap<JTextPane, File> hashMap;
     Thread thread;
@@ -38,7 +44,7 @@ public class MainFrame extends javax.swing.JFrame {
     Action copy = new DefaultEditorKit.CopyAction();
     Action paste = new DefaultEditorKit.PasteAction();
     Action cut = new DefaultEditorKit.CutAction();
-    
+
     public MainFrame() {
         this.getContentPane().setBackground(new Color(254, 242, 241));
         this.setTitle("CUTE EDITOR");
@@ -48,9 +54,21 @@ public class MainFrame extends javax.swing.JFrame {
         designTaskTop();
         setSortcutKey();
         hashMap = new HashMap<>();
-        
+//        check();
     }
     
+    private void check(){
+        JTextPane textPane = getCurrentTextPane(jtpTable);
+        if(textPane != null){
+            textPane.setSelectionStart(5);
+        textPane.setSelectionEnd(10);
+        textPane.setSelectionColor(Color.PINK);
+        textPane.setSelectedTextColor(Color.BLUE);
+        
+        }
+        
+    }
+
     private void designTask() {
         setMyButton(btnNew, "src/Icon/new-file.png");
         setMyButton(btnOpen, "src/Icon/open-file.png");
@@ -63,11 +81,11 @@ public class MainFrame extends javax.swing.JFrame {
         jpnTask.setBorder(BorderFactory.createMatteBorder(0, 3, 0, 0, Color.RED));
         jpnTask.setBackground(new Color(252, 200, 196));
     }
-    
+
     private void designText() {
         jtpTable.setBorder(null);
     }
-    
+
     private void designTaskTop() {
         setMyButtonTop(btnBold, "src/Icon/bold.png");
         setMyButtonTop(btnItalic, "src/Icon/italic.png");
@@ -86,7 +104,7 @@ public class MainFrame extends javax.swing.JFrame {
         setMyButtonTop(splite4, "src/Icon/splite.png");
         btnRedo.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.RED));
     }
-    
+
     private void setSortcutKey() {
         //new file
         Action newFile = new AbstractAction("New File") {
@@ -159,7 +177,7 @@ public class MainFrame extends javax.swing.JFrame {
         btnClose.getActionMap().put("Close File", closeFile);
         btnClose.addActionListener(closeFile);
     }
-    
+
     public void setMyButton(JButton button, String pathIcon) {
         button.setContentAreaFilled(false);
         button.setBorder(new MyButton(2));
@@ -167,7 +185,7 @@ public class MainFrame extends javax.swing.JFrame {
         Icon i = new ImageIcon(pathIcon);
         button.setIcon(i);
     }
-    
+
     public void setMyButtonTop(JButton button, String pathIcon) {
         button.setContentAreaFilled(false);
         button.setBorder(new MyButton(0));
@@ -175,7 +193,7 @@ public class MainFrame extends javax.swing.JFrame {
         Icon i = new ImageIcon(pathIcon);
         button.setIcon(i);
     }
-    
+
     public void setMyButtonTopMouse(JButton button, String pathIcon) {
         button.setContentAreaFilled(false);
         button.setBorder(new MyButton(0));
@@ -183,7 +201,7 @@ public class MainFrame extends javax.swing.JFrame {
         Icon i = new ImageIcon(pathIcon);
         button.setIcon(i);
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -915,9 +933,28 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBoldMouseExited
 
     private void btnBoldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBoldActionPerformed
+        JTextPane textPane = getCurrentTextPane(jtpTable);
+        String textSelected = textPane.getSelectedText();
+        StyledDocument doc = (StyledDocument) textPane.getDocument();
+        int selectionEnd = textPane.getSelectionEnd();
+        int selectionStart = textPane.getSelectionStart();
+        if (selectionStart == selectionEnd) {
+            return;
+        }
+        Element element = doc.getCharacterElement(selectionStart);
+        AttributeSet as = element.getAttributes();
+        MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
+        StyleConstants.setBold(asNew, !StyleConstants.isBold(as));
+        doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
+        textPane.setSelectionStart(selectionStart);
+        textPane.setSelectionEnd(selectionEnd);
+        textPane.setSelectionColor(Color.PINK);
+        textPane.setSelectedTextColor(Color.BLUE);
+            
 
     }//GEN-LAST:event_btnBoldActionPerformed
 
+    
     private void btnItalicMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnItalicMouseMoved
         setMyButtonTopMouse(btnItalic, "src/Icon/italic-mouse.png");
     }//GEN-LAST:event_btnItalicMouseMoved
@@ -927,7 +964,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnItalicMouseExited
 
     private void btnItalicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnItalicActionPerformed
-        // TODO add your handling code here:
+        check();
     }//GEN-LAST:event_btnItalicActionPerformed
 
     private void btnUnderLineMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUnderLineMouseMoved
@@ -1125,7 +1162,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
     }
-    
+
     public JTabbedPane getJtpTable() {
         return jtpTable;
     }
