@@ -7,9 +7,10 @@ import java.awt.event.ActionEvent;
 import static java.awt.event.ActionEvent.ALT_MASK;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -23,8 +24,12 @@ import javax.swing.JTextPane;
 import javax.swing.JViewport;
 import javax.swing.KeyStroke;
 import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultCaret;
 import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Element;
+import javax.swing.text.Highlighter;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -55,18 +60,6 @@ public class MainFrame extends javax.swing.JFrame {
         setSortcutKey();
         hashMap = new HashMap<>();
 //        check();
-    }
-    
-    private void check(){
-        JTextPane textPane = getCurrentTextPane(jtpTable);
-        if(textPane != null){
-            textPane.setSelectionStart(5);
-        textPane.setSelectionEnd(10);
-        textPane.setSelectionColor(Color.PINK);
-        textPane.setSelectedTextColor(Color.BLUE);
-        
-        }
-        
     }
 
     private void designTask() {
@@ -946,15 +939,11 @@ public class MainFrame extends javax.swing.JFrame {
         MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
         StyleConstants.setBold(asNew, !StyleConstants.isBold(as));
         doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
-        textPane.setSelectionStart(selectionStart);
-        textPane.setSelectionEnd(selectionEnd);
-        textPane.setSelectionColor(Color.PINK);
-        textPane.setSelectedTextColor(Color.BLUE);
-            
+
 
     }//GEN-LAST:event_btnBoldActionPerformed
 
-    
+
     private void btnItalicMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnItalicMouseMoved
         setMyButtonTopMouse(btnItalic, "src/Icon/italic-mouse.png");
     }//GEN-LAST:event_btnItalicMouseMoved
@@ -964,7 +953,19 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnItalicMouseExited
 
     private void btnItalicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnItalicActionPerformed
-        check();
+        JTextPane textPane = getCurrentTextPane(jtpTable);
+        String textSelected = textPane.getSelectedText();
+        StyledDocument doc = (StyledDocument) textPane.getDocument();
+        int selectionEnd = textPane.getSelectionEnd();
+        int selectionStart = textPane.getSelectionStart();
+        if (selectionStart == selectionEnd) {
+            return;
+        }
+        Element element = doc.getCharacterElement(selectionStart);
+        AttributeSet as = element.getAttributes();
+        MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
+        StyleConstants.setItalic(asNew, !StyleConstants.isItalic(as));
+        doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
     }//GEN-LAST:event_btnItalicActionPerformed
 
     private void btnUnderLineMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUnderLineMouseMoved
@@ -976,7 +977,19 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUnderLineMouseExited
 
     private void btnUnderLineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnderLineActionPerformed
-        // TODO add your handling code here:
+        JTextPane textPane = getCurrentTextPane(jtpTable);
+        String textSelected = textPane.getSelectedText();
+        StyledDocument doc = (StyledDocument) textPane.getDocument();
+        int selectionEnd = textPane.getSelectionEnd();
+        int selectionStart = textPane.getSelectionStart();
+        if (selectionStart == selectionEnd) {
+            return;
+        }
+        Element element = doc.getCharacterElement(selectionStart);
+        AttributeSet as = element.getAttributes();
+        MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
+        StyleConstants.setUnderline(asNew, !StyleConstants.isUnderline(as));
+        doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
     }//GEN-LAST:event_btnUnderLineActionPerformed
 
     private void btnFindMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFindMouseMoved
@@ -1016,7 +1029,23 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCodeMouseExited
 
     private void btnCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCodeActionPerformed
-
+        JTextPane textPane = getCurrentTextPane(jtpTable);
+        String textSelected = textPane.getSelectedText();
+        StyledDocument doc = (StyledDocument) textPane.getDocument();
+        int selectionEnd = textPane.getSelectionEnd();
+        int selectionStart = textPane.getSelectionStart();
+        if (selectionStart == selectionEnd) {
+            return;
+        }
+        Element element = doc.getCharacterElement(selectionStart);
+        AttributeSet as = element.getAttributes();
+        MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
+        StyleConstants.setFontSize(asNew, 14);
+        StyleConstants.setFontFamily(asNew, "Roboto");
+        StyleConstants.setBold(asNew, false);
+        StyleConstants.setItalic(asNew, false);
+        StyleConstants.setUnderline(asNew, false);
+        doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
     }//GEN-LAST:event_btnCodeActionPerformed
 
     private void btnUndoNavigatorMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUndoNavigatorMouseMoved
@@ -1100,7 +1129,21 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnH1MouseExited
 
     private void btnH1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnH1ActionPerformed
-        // TODO add your handling code here:
+        JTextPane textPane = getCurrentTextPane(jtpTable);
+        String textSelected = textPane.getSelectedText();
+        StyledDocument doc = (StyledDocument) textPane.getDocument();
+        int selectionEnd = textPane.getSelectionEnd();
+        int selectionStart = textPane.getSelectionStart();
+        if (selectionStart == selectionEnd) {
+            return;
+        }
+        Element element = doc.getCharacterElement(selectionStart);
+        AttributeSet as = element.getAttributes();
+        MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
+        StyleConstants.setFontSize(asNew, 24);
+        StyleConstants.setBold(asNew, !StyleConstants.isBold(as));
+        StyleConstants.setFontFamily(asNew, "Lato Black");
+        doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
     }//GEN-LAST:event_btnH1ActionPerformed
 
     private void btnH3MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnH3MouseMoved
@@ -1112,7 +1155,21 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnH3MouseExited
 
     private void btnH3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnH3ActionPerformed
-        // TODO add your handling code here:
+        JTextPane textPane = getCurrentTextPane(jtpTable);
+        String textSelected = textPane.getSelectedText();
+        StyledDocument doc = (StyledDocument) textPane.getDocument();
+        int selectionEnd = textPane.getSelectionEnd();
+        int selectionStart = textPane.getSelectionStart();
+        if (selectionStart == selectionEnd) {
+            return;
+        }
+        Element element = doc.getCharacterElement(selectionStart);
+        AttributeSet as = element.getAttributes();
+        MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
+        StyleConstants.setFontSize(asNew, 18);
+        StyleConstants.setBold(asNew, !StyleConstants.isBold(as));
+        StyleConstants.setFontFamily(asNew, "Lato Black");
+        doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
     }//GEN-LAST:event_btnH3ActionPerformed
 
     private void btnH2MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnH2MouseMoved
@@ -1124,7 +1181,21 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnH2MouseExited
 
     private void btnH2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnH2ActionPerformed
-        // TODO add your handling code here:
+        JTextPane textPane = getCurrentTextPane(jtpTable);
+        String textSelected = textPane.getSelectedText();
+        StyledDocument doc = (StyledDocument) textPane.getDocument();
+        int selectionEnd = textPane.getSelectionEnd();
+        int selectionStart = textPane.getSelectionStart();
+        if (selectionStart == selectionEnd) {
+            return;
+        }
+        Element element = doc.getCharacterElement(selectionStart);
+        AttributeSet as = element.getAttributes();
+        MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
+        StyleConstants.setFontSize(asNew, 21);
+        StyleConstants.setBold(asNew, !StyleConstants.isBold(as));
+        StyleConstants.setFontFamily(asNew, "Lato Black");
+        doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
     }//GEN-LAST:event_btnH2ActionPerformed
 
     /**

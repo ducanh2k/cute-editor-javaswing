@@ -20,6 +20,8 @@ import javax.swing.JViewport;
 import javax.swing.border.AbstractBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
 
 /**
  *
@@ -245,10 +247,17 @@ public class Find extends javax.swing.JFrame {
             }
 
             if (index != -1) {
-                int selectStart = index;
-                int selectEnd = index + find.length();
-                textPane.setSelectionStart(selectStart);
-                textPane.setSelectionEnd(selectEnd);
+                try {
+                    int selectStart = index;
+                    int selectEnd = index + find.length();
+                    textPane.setSelectionStart(selectStart);
+                    textPane.setSelectionEnd(selectEnd);
+                    Highlighter highlight = textPane.getHighlighter();
+                    highlight.removeAllHighlights();
+                    highlight.addHighlight(selectStart, selectEnd, DefaultHighlighter.DefaultPainter);
+                } catch (BadLocationException ex) {
+                    ex.printStackTrace();
+                }
             } else {
                 JOptionPane.showMessageDialog(
                         this,
