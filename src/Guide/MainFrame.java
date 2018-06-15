@@ -1,6 +1,7 @@
 package Guide;
 
 import MyTask.MyButton;
+import MyStack.MyStack;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -9,8 +10,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Stack;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -23,13 +23,11 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
 import javax.swing.JViewport;
 import javax.swing.KeyStroke;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultCaret;
 import javax.swing.text.DefaultEditorKit;
-import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Element;
-import javax.swing.text.Highlighter;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -44,6 +42,8 @@ public class MainFrame extends javax.swing.JFrame {
     int countFile = 0;
     HashMap<JTextPane, File> hashMap;
     Thread thread;
+    MyStack<String> stackUndo = new MyStack<>();
+    MyStack<String> stackRedo = new MyStack<>();
 
     //action cut, copy, paste
     Action copy = new DefaultEditorKit.CopyAction();
@@ -59,7 +59,32 @@ public class MainFrame extends javax.swing.JFrame {
         designTaskTop();
         setSortcutKey();
         hashMap = new HashMap<>();
-//        check();
+    }
+
+    private void changeContent() {
+        JTextPane textPane = getCurrentTextPane(jtpTable);
+        if (textPane != null) {
+            textPane.addCaretListener(new CaretListener() {
+                @Override
+                public void caretUpdate(CaretEvent ce) {
+                    stackUndo.push(textPane.getText());
+                }
+            });
+        }
+    }
+
+    private void undo() {
+        JTextPane textPane = getCurrentTextPane(jtpTable);
+        stackUndo.pop();
+        stackRedo.push(stackUndo.top());
+        textPane.setText(stackUndo.pop());
+    }
+
+    private void redo() {
+        JTextPane textPane = getCurrentTextPane(jtpTable);
+        textPane.setText(stackRedo.top());
+        stackRedo.pop();
+        stackUndo.push(stackRedo.top());
     }
 
     private void designTask() {
@@ -758,6 +783,7 @@ public class MainFrame extends javax.swing.JFrame {
         Font font = new Font("Verdana", Font.BOLD, 12);
         btnNew.setForeground(new Color(114, 16, 6));
         btnNew.setFont(font);
+        changeContent();
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void btnNewMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNewMouseMoved
@@ -1057,7 +1083,8 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUndoNavigatorMouseExited
 
     private void btnUndoNavigatorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUndoNavigatorActionPerformed
-        // TODO add your handling code here:
+        undo();
+
     }//GEN-LAST:event_btnUndoNavigatorActionPerformed
 
     private void btnRedoNavigatorMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRedoNavigatorMouseMoved
@@ -1069,7 +1096,8 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRedoNavigatorMouseExited
 
     private void btnRedoNavigatorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRedoNavigatorActionPerformed
-        // TODO add your handling code here:
+
+        redo();
     }//GEN-LAST:event_btnRedoNavigatorActionPerformed
 
     private void splite1MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_splite1MouseMoved

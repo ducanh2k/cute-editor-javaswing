@@ -253,7 +253,7 @@ public class Replace extends javax.swing.JFrame {
     }//GEN-LAST:event_btnReplaceAllActionPerformed
 
     /**
-     * @param args the command line arguments
+     * @param args the command line argumentsf
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

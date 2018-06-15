@@ -1,65 +1,110 @@
 package Test;
 
+import MyStack.MyStack;
 import java.awt.Color;
+import javax.swing.JTextPane;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 
 public class button extends javax.swing.JFrame {
-    
-    Thread t;
-    
+
+    MyStack<String> stackUndo = new MyStack<>();
+    MyStack<String> stackRedo = new MyStack<>();
+
     public button() {
         initComponents();
-        doAnimation();
-        t.start();
+
+        change();
     }
-    
+
+    private void change() {
+        txtText.addCaretListener(new CaretListener() {
+            @Override
+            public void caretUpdate(CaretEvent ce) {
+                System.out.println(txtText.getText());
+                stackUndo.push(txtText.getText());
+            }
+        });
+    }
+
+    private void undo() {
+        stackUndo.pop();
+        stackRedo.push(stackUndo.top());
+        txtText.setText(stackUndo.pop());
+    }
+
+    private void redo() {
+        txtText.setText(stackRedo.top());
+        stackRedo.pop();
+        stackUndo.push(stackRedo.top());
+
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnHello = new javax.swing.JButton();
-        lbHello = new javax.swing.JLabel();
+        btnUndo = new javax.swing.JButton();
+        btnRedo = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtText = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        btnHello.setText("Hello");
-        btnHello.addActionListener(new java.awt.event.ActionListener() {
+        btnUndo.setText("Hello");
+        btnUndo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHelloActionPerformed(evt);
+                btnUndoActionPerformed(evt);
             }
         });
 
-        lbHello.setText("Hello");
+        btnRedo.setText("Redo");
+        btnRedo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRedoActionPerformed(evt);
+            }
+        });
+
+        jScrollPane1.setViewportView(txtText);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(183, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnHello)
-                        .addGap(162, 162, 162))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(lbHello)
-                        .addGap(179, 179, 179))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(98, 98, 98)
+                        .addComponent(btnUndo)
+                        .addGap(56, 56, 56)
+                        .addComponent(btnRedo))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(86, Short.MAX_VALUE)
-                .addComponent(lbHello)
-                .addGap(46, 46, 46)
-                .addComponent(btnHello)
-                .addGap(131, 131, 131))
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+                .addGap(34, 34, 34)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnUndo)
+                    .addComponent(btnRedo))
+                .addGap(83, 83, 83))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnHelloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHelloActionPerformed
+    private void btnUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUndoActionPerformed
+        undo();
+    }//GEN-LAST:event_btnUndoActionPerformed
 
-    }//GEN-LAST:event_btnHelloActionPerformed
+    private void btnRedoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRedoActionPerformed
+        redo();
+    }//GEN-LAST:event_btnRedoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -95,34 +140,12 @@ public class button extends javax.swing.JFrame {
             }
         });
     }
-    boolean check = true;
 
-    public void doAnimation() {
-        t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    int x = btnHello.getX();
-                    int y = btnHello.getY();
-                    if (check == true) {
-                        y -= 10;
-                        btnHello.setLocation(x, y);
-                    } else {
-                        y+=10;
-                        btnHello.setLocation(x, y);
-                    }
-                    check = !check;
-                    try {
-                        Thread.sleep(200);
-                    } catch (InterruptedException ie) {
-                    }
-                }
-            }
-        }); 
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnHello;
-    private javax.swing.JLabel lbHello;
+    private javax.swing.JButton btnRedo;
+    private javax.swing.JButton btnUndo;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextPane txtText;
     // End of variables declaration//GEN-END:variables
 }
