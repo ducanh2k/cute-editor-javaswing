@@ -81,6 +81,7 @@ public class MyLinkedList<T> {
     }
 
     public T getTail() {
+        if (head == null) return null;
         MyNode temp = head;
         for (int i = 0; i < size() - 1; i++) {
             temp = temp.getNext();
