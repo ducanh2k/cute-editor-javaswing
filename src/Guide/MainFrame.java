@@ -135,23 +135,26 @@ public class MainFrame extends javax.swing.JFrame {
         btnClose.getActionMap().put("Close File", closeFile);
         btnClose.addActionListener(closeFile);
 
-        //Bold text
+        //bold text
         Action boldText = new AbstractAction("Bold Text") {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                JTextPane textPane = getCurrentTextPane(jtpTable);
-                String textSelected = textPane.getSelectedText();
-                StyledDocument doc = (StyledDocument) textPane.getDocument();
-                int selectionEnd = textPane.getSelectionEnd();
-                int selectionStart = textPane.getSelectionStart();
-                if (selectionStart == selectionEnd) {
-                    return;
+                try {
+                    JTextPane textPane = getCurrentTextPane(jtpTable);
+                    String textSelected = textPane.getSelectedText();
+                    StyledDocument doc = (StyledDocument) textPane.getDocument();
+                    int selectionEnd = textPane.getSelectionEnd();
+                    int selectionStart = textPane.getSelectionStart();
+                    if (selectionStart == selectionEnd) {
+                        return;
+                    }
+                    Element element = doc.getCharacterElement(selectionStart);
+                    AttributeSet as = element.getAttributes();
+                    MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
+                    StyleConstants.setBold(asNew, !StyleConstants.isBold(as));
+                    doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
+                } catch (Exception e) {
                 }
-                Element element = doc.getCharacterElement(selectionStart);
-                AttributeSet as = element.getAttributes();
-                MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
-                StyleConstants.setBold(asNew, !StyleConstants.isBold(as));
-                doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
             }
         };
         KeyStroke controlB = KeyStroke.getKeyStroke(KeyEvent.VK_B, InputEvent.CTRL_MASK);
@@ -160,23 +163,26 @@ public class MainFrame extends javax.swing.JFrame {
         btnBold.getActionMap().put("Bold Text", boldText);
         btnBold.addActionListener(boldText);
 
-        //Italic text
+        //italic text
         Action italicText = new AbstractAction("Italic Text") {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                JTextPane textPane = getCurrentTextPane(jtpTable);
-                String textSelected = textPane.getSelectedText();
-                StyledDocument doc = (StyledDocument) textPane.getDocument();
-                int selectionEnd = textPane.getSelectionEnd();
-                int selectionStart = textPane.getSelectionStart();
-                if (selectionStart == selectionEnd) {
-                    return;
+                try {
+                    JTextPane textPane = getCurrentTextPane(jtpTable);
+                    String textSelected = textPane.getSelectedText();
+                    StyledDocument doc = (StyledDocument) textPane.getDocument();
+                    int selectionEnd = textPane.getSelectionEnd();
+                    int selectionStart = textPane.getSelectionStart();
+                    if (selectionStart == selectionEnd) {
+                        return;
+                    }
+                    Element element = doc.getCharacterElement(selectionStart);
+                    AttributeSet as = element.getAttributes();
+                    MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
+                    StyleConstants.setItalic(asNew, !StyleConstants.isItalic(as));
+                    doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
+                } catch (Exception e) {
                 }
-                Element element = doc.getCharacterElement(selectionStart);
-                AttributeSet as = element.getAttributes();
-                MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
-                StyleConstants.setItalic(asNew, !StyleConstants.isItalic(as));
-                doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
             }
         };
         KeyStroke controlI = KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_MASK);
@@ -185,23 +191,26 @@ public class MainFrame extends javax.swing.JFrame {
         btnItalic.getActionMap().put("Italic Text", italicText);
         btnItalic.addActionListener(italicText);
 
-        //Underline text
+        //underline text
         Action underlineText = new AbstractAction("Underline Text") {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                JTextPane textPane = getCurrentTextPane(jtpTable);
-                String textSelected = textPane.getSelectedText();
-                StyledDocument doc = (StyledDocument) textPane.getDocument();
-                int selectionEnd = textPane.getSelectionEnd();
-                int selectionStart = textPane.getSelectionStart();
-                if (selectionStart == selectionEnd) {
-                    return;
+                try {
+                    JTextPane textPane = getCurrentTextPane(jtpTable);
+                    String textSelected = textPane.getSelectedText();
+                    StyledDocument doc = (StyledDocument) textPane.getDocument();
+                    int selectionEnd = textPane.getSelectionEnd();
+                    int selectionStart = textPane.getSelectionStart();
+                    if (selectionStart == selectionEnd) {
+                        return;
+                    }
+                    Element element = doc.getCharacterElement(selectionStart);
+                    AttributeSet as = element.getAttributes();
+                    MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
+                    StyleConstants.setUnderline(asNew, !StyleConstants.isUnderline(as));
+                    doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
+                } catch (Exception e) {
                 }
-                Element element = doc.getCharacterElement(selectionStart);
-                AttributeSet as = element.getAttributes();
-                MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
-                StyleConstants.setUnderline(asNew, !StyleConstants.isUnderline(as));
-                doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
             }
         };
         KeyStroke controlU = KeyStroke.getKeyStroke(KeyEvent.VK_U, InputEvent.CTRL_MASK);
@@ -210,25 +219,28 @@ public class MainFrame extends javax.swing.JFrame {
         btnUnderLine.getActionMap().put("Underline Text", underlineText);
         btnUnderLine.addActionListener(underlineText);
 
-        //Header1 text
+        //header1 text
         Action h1Text = new AbstractAction("Header1 Text") {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                JTextPane textPane = getCurrentTextPane(jtpTable);
-                String textSelected = textPane.getSelectedText();
-                StyledDocument doc = (StyledDocument) textPane.getDocument();
-                int selectionEnd = textPane.getSelectionEnd();
-                int selectionStart = textPane.getSelectionStart();
-                if (selectionStart == selectionEnd) {
-                    return;
+                try {
+                    JTextPane textPane = getCurrentTextPane(jtpTable);
+                    String textSelected = textPane.getSelectedText();
+                    StyledDocument doc = (StyledDocument) textPane.getDocument();
+                    int selectionEnd = textPane.getSelectionEnd();
+                    int selectionStart = textPane.getSelectionStart();
+                    if (selectionStart == selectionEnd) {
+                        return;
+                    }
+                    Element element = doc.getCharacterElement(selectionStart);
+                    AttributeSet as = element.getAttributes();
+                    MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
+                    StyleConstants.setFontSize(asNew, 24);
+                    StyleConstants.setBold(asNew, !StyleConstants.isBold(as));
+                    StyleConstants.setFontFamily(asNew, "Lato Black");
+                    doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
+                } catch (Exception e) {
                 }
-                Element element = doc.getCharacterElement(selectionStart);
-                AttributeSet as = element.getAttributes();
-                MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
-                StyleConstants.setFontSize(asNew, 24);
-                StyleConstants.setBold(asNew, !StyleConstants.isBold(as));
-                StyleConstants.setFontFamily(asNew, "Lato Black");
-                doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
             }
         };
         KeyStroke control1 = KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.CTRL_MASK);
@@ -237,25 +249,28 @@ public class MainFrame extends javax.swing.JFrame {
         btnH1.getActionMap().put("Header1 Text", h1Text);
         btnH1.addActionListener(h1Text);
 
-        //Header2 text
+        //header2 text
         Action h2Text = new AbstractAction("Header2 Text") {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                JTextPane textPane = getCurrentTextPane(jtpTable);
-                String textSelected = textPane.getSelectedText();
-                StyledDocument doc = (StyledDocument) textPane.getDocument();
-                int selectionEnd = textPane.getSelectionEnd();
-                int selectionStart = textPane.getSelectionStart();
-                if (selectionStart == selectionEnd) {
-                    return;
+                try {
+                    JTextPane textPane = getCurrentTextPane(jtpTable);
+                    String textSelected = textPane.getSelectedText();
+                    StyledDocument doc = (StyledDocument) textPane.getDocument();
+                    int selectionEnd = textPane.getSelectionEnd();
+                    int selectionStart = textPane.getSelectionStart();
+                    if (selectionStart == selectionEnd) {
+                        return;
+                    }
+                    Element element = doc.getCharacterElement(selectionStart);
+                    AttributeSet as = element.getAttributes();
+                    MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
+                    StyleConstants.setFontSize(asNew, 21);
+                    StyleConstants.setBold(asNew, !StyleConstants.isBold(as));
+                    StyleConstants.setFontFamily(asNew, "Lato Black");
+                    doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
+                } catch (Exception e) {
                 }
-                Element element = doc.getCharacterElement(selectionStart);
-                AttributeSet as = element.getAttributes();
-                MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
-                StyleConstants.setFontSize(asNew, 21);
-                StyleConstants.setBold(asNew, !StyleConstants.isBold(as));
-                StyleConstants.setFontFamily(asNew, "Lato Black");
-                doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
             }
         };
         KeyStroke control2 = KeyStroke.getKeyStroke(KeyEvent.VK_2, InputEvent.CTRL_MASK);
@@ -264,25 +279,28 @@ public class MainFrame extends javax.swing.JFrame {
         btnH2.getActionMap().put("Header2 Text", h2Text);
         btnH2.addActionListener(h2Text);
 
-        //Header3 text
+        //header3 text
         Action h3Text = new AbstractAction("Header3 Text") {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                JTextPane textPane = getCurrentTextPane(jtpTable);
-                String textSelected = textPane.getSelectedText();
-                StyledDocument doc = (StyledDocument) textPane.getDocument();
-                int selectionEnd = textPane.getSelectionEnd();
-                int selectionStart = textPane.getSelectionStart();
-                if (selectionStart == selectionEnd) {
-                    return;
+                try {
+                    JTextPane textPane = getCurrentTextPane(jtpTable);
+                    String textSelected = textPane.getSelectedText();
+                    StyledDocument doc = (StyledDocument) textPane.getDocument();
+                    int selectionEnd = textPane.getSelectionEnd();
+                    int selectionStart = textPane.getSelectionStart();
+                    if (selectionStart == selectionEnd) {
+                        return;
+                    }
+                    Element element = doc.getCharacterElement(selectionStart);
+                    AttributeSet as = element.getAttributes();
+                    MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
+                    StyleConstants.setFontSize(asNew, 18);
+                    StyleConstants.setBold(asNew, !StyleConstants.isBold(as));
+                    StyleConstants.setFontFamily(asNew, "Lato Black");
+                    doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
+                } catch (Exception e) {
                 }
-                Element element = doc.getCharacterElement(selectionStart);
-                AttributeSet as = element.getAttributes();
-                MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
-                StyleConstants.setFontSize(asNew, 18);
-                StyleConstants.setBold(asNew, !StyleConstants.isBold(as));
-                StyleConstants.setFontFamily(asNew, "Lato Black");
-                doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
             }
         };
         KeyStroke control3 = KeyStroke.getKeyStroke(KeyEvent.VK_3, InputEvent.CTRL_MASK);
@@ -343,9 +361,12 @@ public class MainFrame extends javax.swing.JFrame {
         Action redo = new AbstractAction("Redo") {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                //get manager stack of tab current
-                ManagerStack managerStach = hmStack.get(jtpTable.getSelectedIndex() + 1);
-                managerStach.redo();
+                try {
+                    //get manager stack of tab current
+                    ManagerStack managerStach = hmStack.get(jtpTable.getSelectedIndex() + 1);
+                    managerStach.redo();
+                } catch (Exception e) {
+                }
             }
         };
         KeyStroke controlY = KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_MASK);
@@ -358,23 +379,26 @@ public class MainFrame extends javax.swing.JFrame {
         Action code = new AbstractAction("Code") {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                JTextPane textPane = getCurrentTextPane(jtpTable);
-                String textSelected = textPane.getSelectedText();
-                StyledDocument doc = (StyledDocument) textPane.getDocument();
-                int selectionEnd = textPane.getSelectionEnd();
-                int selectionStart = textPane.getSelectionStart();
-                if (selectionStart == selectionEnd) {
-                    return;
+                try {
+                    JTextPane textPane = getCurrentTextPane(jtpTable);
+                    String textSelected = textPane.getSelectedText();
+                    StyledDocument doc = (StyledDocument) textPane.getDocument();
+                    int selectionEnd = textPane.getSelectionEnd();
+                    int selectionStart = textPane.getSelectionStart();
+                    if (selectionStart == selectionEnd) {
+                        return;
+                    }
+                    Element element = doc.getCharacterElement(selectionStart);
+                    AttributeSet as = element.getAttributes();
+                    MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
+                    StyleConstants.setFontSize(asNew, 14);
+                    StyleConstants.setFontFamily(asNew, "Roboto");
+                    StyleConstants.setBold(asNew, false);
+                    StyleConstants.setItalic(asNew, false);
+                    StyleConstants.setUnderline(asNew, false);
+                    doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
+                } catch (Exception e) {
                 }
-                Element element = doc.getCharacterElement(selectionStart);
-                AttributeSet as = element.getAttributes();
-                MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
-                StyleConstants.setFontSize(asNew, 14);
-                StyleConstants.setFontFamily(asNew, "Roboto");
-                StyleConstants.setBold(asNew, false);
-                StyleConstants.setItalic(asNew, false);
-                StyleConstants.setUnderline(asNew, false);
-                doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
             }
         };
         KeyStroke controlG = KeyStroke.getKeyStroke(KeyEvent.VK_G, InputEvent.CTRL_MASK);
@@ -382,6 +406,20 @@ public class MainFrame extends javax.swing.JFrame {
                 .put(control1, "Redo");
         btnCode.getActionMap().put("Redo", code);
         btnCode.addActionListener(code);
+
+        //setting
+        Action setting = new AbstractAction("Setting") {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                Setting setting = new Setting(MainFrame.this, false);
+                setting.setVisible(true);
+            }
+        };
+        KeyStroke controlD = KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_MASK);
+        btnSetting.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(control1, "Setting");
+        btnSetting.getActionMap().put("Setting", setting);
+        btnSetting.addActionListener(setting);
     }
 
     @SuppressWarnings("unchecked")

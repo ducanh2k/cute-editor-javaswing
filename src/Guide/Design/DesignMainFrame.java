@@ -453,7 +453,7 @@ public class DesignMainFrame {
 
             @Override
             public void mouseExited(MouseEvent me) {
-                setMyButtonTopMouse(mainFrame.getBtnH2(), "src/Icon/h1.png");
+                setMyButtonTopMouse(mainFrame.getBtnH2(), "src/Icon/h2.png");
             }
         });
 
@@ -464,7 +464,7 @@ public class DesignMainFrame {
 
             @Override
             public void mouseMoved(MouseEvent me) {
-                setMyButtonTopMouse(mainFrame.getBtnH2(), "src/Icon/h1-mouse.png");
+                setMyButtonTopMouse(mainFrame.getBtnH2(), "src/Icon/h2-mouse.png");
             }
         });
 
@@ -487,7 +487,7 @@ public class DesignMainFrame {
 
             @Override
             public void mouseExited(MouseEvent me) {
-                setMyButtonTopMouse(mainFrame.getBtnH3(), "src/Icon/h1.png");
+                setMyButtonTopMouse(mainFrame.getBtnH3(), "src/Icon/h3.png");
             }
         });
 
@@ -498,7 +498,7 @@ public class DesignMainFrame {
 
             @Override
             public void mouseMoved(MouseEvent me) {
-                setMyButtonTopMouse(mainFrame.getBtnH3(), "src/Icon/h1-mouse.png");
+                setMyButtonTopMouse(mainFrame.getBtnH3(), "src/Icon/h3-mouse.png");
             }
         });
 

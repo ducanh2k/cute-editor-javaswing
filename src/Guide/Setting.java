@@ -1,24 +1,16 @@
 package Guide;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Component;
+import Guide.Design.DesignSetting;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JTextField;
 import javax.swing.JTextPane;
-import javax.swing.JViewport;
-import javax.swing.border.AbstractBorder;
-import javax.swing.border.EmptyBorder;
 
 /**
  *
@@ -34,14 +26,15 @@ public class Setting extends javax.swing.JFrame {
     public Setting(java.awt.Frame parent, boolean modal) {
         initComponents();
         setFontName();
-        customTextField();
-        customComboBox();
+        DesignSetting designSetting = new DesignSetting(this);
+        designSetting.design();
         getCurrentFile(parent);
         setFontCurrent(parent);
         this.setTitle("Setting");
         this.mainFrame = (MainFrame) parent;
         this.setResizable(false);
         txtWorkspace.setEditable(false);
+        setDefaultCloseOperation(HIDE_ON_CLOSE);
     }
 
     @SuppressWarnings("unchecked")
@@ -208,7 +201,7 @@ public class Setting extends javax.swing.JFrame {
 
     private void btnOkeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkeActionPerformed
         if (mainFrame.getJtpTable().getTabCount() > 0) {
-            JTextPane textPane = getCurrentTextPane(mainFrame.getJtpTable());
+            JTextPane textPane = mainFrame.getCurrentTextPane(mainFrame.getJtpTable());
             String fontName = cbbFontName.getSelectedItem().toString();
             int fontSize = Integer.parseInt(cbbFontSize.getSelectedItem().toString());
             int fontStyle = cbbFontStyle.getSelectedIndex();
@@ -223,7 +216,7 @@ public class Setting extends javax.swing.JFrame {
 
         this.mainFrame = (MainFrame) parent;
         if (mainFrame.getJtpTable().getTabCount() >= 0) {
-            JTextPane textPane = getCurrentTextPane(mainFrame.getJtpTable());
+            JTextPane textPane = mainFrame.getCurrentTextPane(mainFrame.getJtpTable());
             if (!mainFrame.hmFile.isEmpty()) {
                 File file = mainFrame.hmFile.get(textPane);
                 if (!file.exists()) {
@@ -238,7 +231,7 @@ public class Setting extends javax.swing.JFrame {
 
         this.mainFrame = (MainFrame) parent;
         if (mainFrame.getJtpTable().getTabCount() >= 0) {
-            JTextPane textPane = getCurrentTextPane(mainFrame.getJtpTable());
+            JTextPane textPane = mainFrame.getCurrentTextPane(mainFrame.getJtpTable());
             if (!mainFrame.hmFile.isEmpty()) {
                 File file = mainFrame.hmFile.get(textPane);
                 cbbFontName.setSelectedIndex(5);
@@ -246,55 +239,6 @@ public class Setting extends javax.swing.JFrame {
         }
     }
 
-    //custom text field
-    private void customTextField() {
-        Font fieldFont = new Font("Roboto", Font.PLAIN, 14);
-        txtWorkspace.setFont(fieldFont);
-        txtWorkspace.setBackground(Color.WHITE);
-        txtWorkspace.setForeground(Color.GRAY);
-        txtWorkspace.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
-                new EmptyBorder(new Insets(15, 25, 15, 25))));
-    }
-
-    //custom combo box
-    private void customComboBox() {
-        Font fieldFont = new Font("Lato", Font.PLAIN, 14);
-        cbbFontName.setFont(fieldFont);
-        cbbFontName.setBackground(Color.WHITE);
-        cbbFontName.setForeground(new Color(100, 99, 99));
-        cbbFontName.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
-                new EmptyBorder(new Insets(15, 25, 15, 25))));
-
-        cbbFontStyle.setFont(fieldFont);
-        cbbFontStyle.setBackground(Color.WHITE);
-        cbbFontStyle.setForeground(new Color(100, 99, 99));
-        cbbFontStyle.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
-                new EmptyBorder(new Insets(15, 25, 15, 25))));
-
-        cbbFontSize.setFont(fieldFont);
-        cbbFontSize.setBackground(Color.WHITE);
-        cbbFontSize.setForeground(new Color(100, 99, 99));
-        cbbFontSize.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
-                new EmptyBorder(new Insets(15, 25, 15, 25))));
-
-        btnOke.setFont(fieldFont);
-        btnOke.setBackground(Color.WHITE);
-        btnOke.setForeground(new Color(62, 156, 0));
-        btnOke.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
-                new EmptyBorder(new Insets(15, 25, 15, 25))));
-
-        btnCancel.setFont(fieldFont);
-        btnCancel.setBackground(Color.WHITE);
-        btnCancel.setForeground(new Color(177, 0, 17));
-        btnCancel.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
-                new EmptyBorder(new Insets(15, 25, 15, 25))));
-    }
 
     //allow user set font name
     private void setFontName() {
@@ -342,40 +286,36 @@ public class Setting extends javax.swing.JFrame {
         });
     }
 
-    @SuppressWarnings("serial")
-    class CustomeBorder extends AbstractBorder {
-
-        @Override
-        public void paintBorder(Component c, Graphics g, int x, int y,
-                int width, int height) {
-            // TODO Auto-generated method stubs
-            super.paintBorder(c, g, x, y, width, height);
-            Graphics2D g2d = (Graphics2D) g;
-            g2d.setStroke(new BasicStroke(12));
-            g2d.setColor(new Color(254, 224, 226));
-            g2d.drawRoundRect(x, y, width - 1, height - 1, 25, 25);
-        }
-    }
-
     class FieldListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println(txtWorkspace.getText());
         }
-
     }
 
-    //get current text pane
-    public JTextPane getCurrentTextPane(JTabbedPane jtpTable) {
-        JTextPane currentTextPane = null;
-        int index = jtpTable.getSelectedIndex();
-        if (index >= 0) {
-            JScrollPane scrollPane = (JScrollPane) jtpTable.getSelectedComponent();
-            JViewport viewport = scrollPane.getViewport();
-            currentTextPane = (JTextPane) viewport.getView();
-        }
-        return currentTextPane;
+    public JButton getBtnCancel() {
+        return btnCancel;
+    }
+
+    public JButton getBtnOke() {
+        return btnOke;
+    }
+
+    public JComboBox<String> getCbbFontName() {
+        return cbbFontName;
+    }
+
+    public JComboBox<String> getCbbFontSize() {
+        return cbbFontSize;
+    }
+
+    public JComboBox<String> getCbbFontStyle() {
+        return cbbFontStyle;
+    }
+
+    public JTextField getTxtWorkspace() {
+        return txtWorkspace;
     }
 
 

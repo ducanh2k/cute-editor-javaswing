@@ -25,7 +25,6 @@ public class Replace extends javax.swing.JFrame {
         DesignReplace designReplace = new DesignReplace(this);
         designReplace.design();
         this.setResizable(false);
-
         setDefaultCloseOperation(HIDE_ON_CLOSE);
     }
 
