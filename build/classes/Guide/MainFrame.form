@@ -28,7 +28,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <Component id="jpnTask" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="btnRedo" max="32767" attributes="0"/>
                   <Component id="jtpTable" max="32767" attributes="0"/>
@@ -54,19 +54,23 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="btnSaveAs" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="btnNew" min="-2" max="-2" attributes="0"/>
                       <Component id="btnOpen" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="btnSave" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="btnSaveAs" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="btnClose" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="btnNormalize" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="btnZip" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="btnSetting" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="20" max="32767" attributes="0"/>
+                  <EmptySpace pref="16" max="32767" attributes="0"/>
+              </Group>
+              <Group type="102" alignment="0" attributes="0">
+                  <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -79,7 +83,7 @@
                   <Component id="btnOpen" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="btnSave" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                   <Component id="btnSaveAs" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="btnNormalize" min="-2" max="-2" attributes="0"/>
@@ -89,7 +93,9 @@
                   <Component id="btnSetting" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="btnClose" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="311" max="32767" attributes="0"/>
+                  <EmptySpace pref="286" max="32767" attributes="0"/>
+                  <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -113,6 +119,11 @@
         <Component class="javax.swing.JButton" name="btnZip">
         </Component>
         <Component class="javax.swing.JButton" name="btnSetting">
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel1">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Thaycacac"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>
@@ -157,7 +168,7 @@
                   <Component id="splite3" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="btnCode" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="121" max="32767" attributes="0"/>
+                  <EmptySpace pref="31" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

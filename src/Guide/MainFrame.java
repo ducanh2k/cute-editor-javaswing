@@ -9,7 +9,11 @@ import static java.awt.event.ActionEvent.ALT_MASK;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
@@ -47,6 +51,10 @@ public class MainFrame extends javax.swing.JFrame {
 
     public MainFrame() {
         this.getContentPane().setBackground(new Color(254, 242, 241));
+        try {
+            this.setIconImage(ImageIO.read(new File("src/Icon/logo.png")));
+        } catch (IOException ex) {
+        }
         this.setTitle("CUTE EDITOR");
         initComponents();
         design.designTask();
@@ -83,15 +91,18 @@ public class MainFrame extends javax.swing.JFrame {
         Action openFile = new AbstractAction("Open File") {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                OpenFile openFile = new OpenFile();
-                openFile.openFile((MainFrame.this), jtpTable, hmFile);
-                MyStack<String> stackUndo = new MyStack<>();
-                MyStack<String> stackRedo = new MyStack<>();
-                JTextPane textpane = getCurrentTextPane(jtpTable);
-                ManagerStack managerStack = new ManagerStack(stackUndo, stackRedo, textpane);
-                managerStack.changeContent();
-                hmStack.put(countFile, managerStack);
-                countFile++;
+                try {
+                    OpenFile openFile = new OpenFile();
+                    openFile.openFile((MainFrame.this), jtpTable, hmFile);
+                    MyStack<String> stackUndo = new MyStack<>();
+                    MyStack<String> stackRedo = new MyStack<>();
+                    JTextPane textpane = getCurrentTextPane(jtpTable);
+                    ManagerStack managerStack = new ManagerStack(stackUndo, stackRedo, textpane);
+                    managerStack.changeContent();
+                    hmStack.put(countFile, managerStack);
+                    countFile++;
+                } catch (Exception e) {
+                }
             }
         };
         KeyStroke controlO = KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK);
@@ -439,7 +450,6 @@ public class MainFrame extends javax.swing.JFrame {
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, "Please save file before zipfile!!!");
                 }
-
             }
         };
         KeyStroke controlL = KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_MASK);
@@ -447,6 +457,19 @@ public class MainFrame extends javax.swing.JFrame {
                 .put(control1, "Zip File");
         btnZip.getActionMap().put("Zip File", zipFile);
         btnZip.addActionListener(zipFile);
+
+        //normalize
+        Action normalize = new AbstractAction("Normalize") {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                JOptionPane.showMessageDialog(null, "Tính năng đang phát triển!!!");
+            }
+        };
+        KeyStroke controlM = KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_MASK);
+        btnNormalize.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(control1, "Zip File");
+        btnNormalize.getActionMap().put("Zip File", normalize);
+        btnNormalize.addActionListener(normalize);
     }
 
     @SuppressWarnings("unchecked")
@@ -462,6 +485,7 @@ public class MainFrame extends javax.swing.JFrame {
         btnNormalize = new javax.swing.JButton();
         btnZip = new javax.swing.JButton();
         btnSetting = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         btnRedo = new javax.swing.JPanel();
         btnBold = new javax.swing.JButton();
         btnItalic = new javax.swing.JButton();
@@ -485,6 +509,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         btnNew.setToolTipText("");
 
+        jLabel1.setText("Thaycacac");
+
         javax.swing.GroupLayout jpnTaskLayout = new javax.swing.GroupLayout(jpnTask);
         jpnTask.setLayout(jpnTaskLayout);
         jpnTaskLayout.setHorizontalGroup(
@@ -492,15 +518,18 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jpnTaskLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jpnTaskLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnSaveAs)
                     .addComponent(btnNew)
                     .addComponent(btnOpen)
                     .addComponent(btnSave)
-                    .addComponent(btnSaveAs)
                     .addComponent(btnClose)
                     .addComponent(btnNormalize)
                     .addComponent(btnZip)
                     .addComponent(btnSetting))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
+            .addGroup(jpnTaskLayout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jpnTaskLayout.setVerticalGroup(
             jpnTaskLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -521,7 +550,9 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(btnSetting)
                 .addGap(18, 18, 18)
                 .addComponent(btnClose)
-                .addContainerGap(311, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 286, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addContainerGap())
         );
 
         btnRedo.setBackground(new java.awt.Color(255, 255, 255));
@@ -591,7 +622,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(splite3)
                 .addGap(18, 18, 18)
                 .addComponent(btnCode)
-                .addContainerGap(121, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
         btnRedoLayout.setVerticalGroup(
             btnRedoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -818,6 +849,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnUnderLine;
     private javax.swing.JButton btnUndoNavigator;
     private javax.swing.JButton btnZip;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jpnTask;
     private javax.swing.JTabbedPane jtpTable;
     private javax.swing.JButton splite1;
