@@ -1,25 +1,14 @@
 package Guide;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
+import Guide.Design.DesignFind;
+import Guide.Design.DesignReplace;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.BorderFactory;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.JTextPane;
-import javax.swing.JViewport;
-import javax.swing.border.AbstractBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.text.BadLocationException;
 
 /**
  *
@@ -32,59 +21,14 @@ public class Replace extends javax.swing.JFrame {
     public Replace(java.awt.Frame parent, boolean modal) {
         initComponents();
         mainFrame = (MainFrame) parent;
-        this.setTitle("Find");
-        customFind();
+        this.setTitle("Replace");
+        DesignReplace designReplace = new DesignReplace(this);
+        designReplace.design();
         this.setResizable(false);
+
+        setDefaultCloseOperation(HIDE_ON_CLOSE);
     }
 
-    private void customFind() {
-        Font fieldFont = new Font("Lato", Font.PLAIN, 14);
-        txtFindWhat.setFont(fieldFont);
-        txtFindWhat.setBackground(Color.WHITE);
-        txtFindWhat.setForeground(new Color(100, 99, 99));
-        txtFindWhat.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
-                new EmptyBorder(new Insets(15, 25, 15, 25))));
-        txtReplaceWith.setFont(fieldFont);
-        txtReplaceWith.setBackground(Color.WHITE);
-        txtReplaceWith.setForeground(new Color(100, 99, 99));
-        txtReplaceWith.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
-                new EmptyBorder(new Insets(15, 25, 15, 25))));
-
-        btnReplace.setFont(fieldFont);
-        btnReplace.setBackground(Color.WHITE);
-        btnReplace.setForeground(new Color(62, 156, 0));
-        btnReplace.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
-                new EmptyBorder(new Insets(15, 25, 15, 25))));
-
-        btnReplaceAll.setFont(fieldFont);
-        btnReplaceAll.setBackground(Color.WHITE);
-        btnReplaceAll.setForeground(new Color(62, 156, 0));
-        btnReplaceAll.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
-                new EmptyBorder(new Insets(15, 25, 15, 25))));
-
-        btnCancel.setFont(fieldFont);
-        btnCancel.setBackground(Color.WHITE);
-        btnCancel.setForeground(new Color(177, 0, 17));
-        btnCancel.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
-                new EmptyBorder(new Insets(15, 25, 15, 25))));
-    }
-
-    //get current text pane
-    public JTextPane getCurrentTextPane(JTabbedPane jtpTable) {
-        JTextPane currentTextPane = null;
-        int index = jtpTable.getSelectedIndex();
-        if (index >= 0) {
-            JScrollPane scrollPane = (JScrollPane) jtpTable.getSelectedComponent();
-            JViewport viewport = scrollPane.getViewport();
-            currentTextPane = (JTextPane) viewport.getView();
-        }
-        return currentTextPane;
-    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -216,7 +160,7 @@ public class Replace extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnReplaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReplaceActionPerformed
-        JTextPane textPane = getCurrentTextPane(mainFrame.getJtpTable());
+        JTextPane textPane = mainFrame.getCurrentTextPane(mainFrame.getJtpTable());
         if (textPane != null) {
             String text = textPane.getText();
             String target = txtFindWhat.getText();
@@ -237,7 +181,7 @@ public class Replace extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnReplaceAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReplaceAllActionPerformed
-        JTextPane textPane = getCurrentTextPane(mainFrame.getJtpTable());
+        JTextPane textPane = mainFrame.getCurrentTextPane(mainFrame.getJtpTable());
         if (textPane != null) {
             String text = textPane.getText();
             String target = txtFindWhat.getText();
@@ -252,9 +196,6 @@ public class Replace extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnReplaceAllActionPerformed
 
-    /**
-     * @param args the command line argumentsf
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -295,21 +236,6 @@ public class Replace extends javax.swing.JFrame {
         });
     }
 
-    @SuppressWarnings("serial")
-    class CustomeBorder extends AbstractBorder {
-
-        @Override
-        public void paintBorder(Component c, Graphics g, int x, int y,
-                int width, int height) {
-            // TODO Auto-generated method stubs
-            super.paintBorder(c, g, x, y, width, height);
-            Graphics2D g2d = (Graphics2D) g;
-            g2d.setStroke(new BasicStroke(12));
-            g2d.setColor(new Color(254, 224, 226));
-            g2d.drawRoundRect(x, y, width - 1, height - 1, 25, 25);
-        }
-    }
-
     class FieldListener implements ActionListener {
 
         @Override
@@ -317,6 +243,46 @@ public class Replace extends javax.swing.JFrame {
             System.out.println(txtFindWhat.getText());
         }
 
+    }
+
+    public JButton getBtnCancel() {
+        return btnCancel;
+    }
+
+    public JButton getBtnReplace() {
+        return btnReplace;
+    }
+
+    public JButton getBtnReplaceAll() {
+        return btnReplaceAll;
+    }
+
+    public JLabel getjLabel1() {
+        return jLabel1;
+    }
+
+    public JLabel getJlbFind() {
+        return jlbFind;
+    }
+
+    public JLabel getJlbFindWhat() {
+        return jlbFindWhat;
+    }
+
+    public JLabel getJlbReplaceWith() {
+        return jlbReplaceWith;
+    }
+
+    public JPanel getJpnBackground() {
+        return jpnBackground;
+    }
+
+    public JTextField getTxtFindWhat() {
+        return txtFindWhat;
+    }
+
+    public JTextField getTxtReplaceWith() {
+        return txtReplaceWith;
     }
 
 

@@ -6,10 +6,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.HashMap;
 import javax.swing.JFrame;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
-import javax.swing.JViewport;
 
 /**
  *
@@ -18,13 +16,14 @@ import javax.swing.JViewport;
 public class SaveAsFile {
 
     //action save as file
-    public void saveAsFile(JTabbedPane jtpTable, HashMap<JTextPane, File> hashMap) {
+    public void saveAsFile(JTabbedPane jtpTable, HashMap<JTextPane, File> hashMap,
+            MainFrame mainFrame) {
         if (jtpTable.getTabCount() > 0) {
             FileDialog fd = new FileDialog(new JFrame(), "Save file", FileDialog.SAVE);
             fd.setVisible(true);
             if (fd.getFile() != null) {
                 String path = fd.getDirectory() + fd.getFile() + ".txt";
-                JTextPane textPanel = getCurrentTextPane(jtpTable);
+                JTextPane textPanel = mainFrame.getCurrentTextPane(jtpTable);
                 int currentFile = jtpTable.getSelectedIndex();
                 try {
                     DataOutputStream dos
@@ -43,16 +42,4 @@ public class SaveAsFile {
             }
         }
     }
-    //get current text pane
-    public JTextPane getCurrentTextPane(JTabbedPane jtpTable) {
-        JTextPane currentTextPane = null;
-        int index = jtpTable.getSelectedIndex();
-        if (index >= 0) {
-            JScrollPane scrollPane = (JScrollPane) jtpTable.getSelectedComponent();
-            JViewport viewport = scrollPane.getViewport();
-            currentTextPane = (JTextPane) viewport.getView();
-        }
-        return currentTextPane;
-    }
-
 }

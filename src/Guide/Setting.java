@@ -224,8 +224,8 @@ public class Setting extends javax.swing.JFrame {
         this.mainFrame = (MainFrame) parent;
         if (mainFrame.getJtpTable().getTabCount() >= 0) {
             JTextPane textPane = getCurrentTextPane(mainFrame.getJtpTable());
-            if (!mainFrame.hashMap.isEmpty()) {
-                File file = mainFrame.hashMap.get(textPane);
+            if (!mainFrame.hmFile.isEmpty()) {
+                File file = mainFrame.hmFile.get(textPane);
                 if (!file.exists()) {
                     txtWorkspace.setText(file.getPath());
                 }
@@ -239,8 +239,8 @@ public class Setting extends javax.swing.JFrame {
         this.mainFrame = (MainFrame) parent;
         if (mainFrame.getJtpTable().getTabCount() >= 0) {
             JTextPane textPane = getCurrentTextPane(mainFrame.getJtpTable());
-            if (!mainFrame.hashMap.isEmpty()) {
-                File file = mainFrame.hashMap.get(textPane);
+            if (!mainFrame.hmFile.isEmpty()) {
+                File file = mainFrame.hmFile.get(textPane);
                 cbbFontName.setSelectedIndex(5);
             }
         }

@@ -97,7 +97,7 @@ public class MainFrame extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent evt) {
                 SaveFile saveFile = new SaveFile();
-                saveFile.saveFile(jtpTable, hmFile);
+                saveFile.saveFile(jtpTable, hmFile, MainFrame.this);
             }
         };
         KeyStroke controlS = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK);
@@ -111,7 +111,7 @@ public class MainFrame extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent evt) {
                 SaveAsFile saveAsFile = new SaveAsFile();
-                saveAsFile.saveAsFile(jtpTable, hmFile);
+                saveAsFile.saveAsFile(jtpTable, hmFile, MainFrame.this);
             }
         };
         KeyStroke controlAltS = KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK + ALT_MASK);
@@ -325,9 +325,12 @@ public class MainFrame extends javax.swing.JFrame {
         Action undo = new AbstractAction("Undo") {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                //get manager stack of tab current
-                ManagerStack managerStach = hmStack.get(jtpTable.getSelectedIndex() + 1);
-                managerStach.undo();
+                try {
+                    //get manager stack of tab current
+                    ManagerStack managerStach = hmStack.get(jtpTable.getSelectedIndex() + 1);
+                    managerStach.undo();
+                } catch (Exception e) {
+                }
             }
         };
         KeyStroke controlZ = KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_MASK);

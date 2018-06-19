@@ -1,24 +1,17 @@
 package Guide;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
+import Guide.Design.DesignFind;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 import javax.swing.JTextPane;
-import javax.swing.JViewport;
-import javax.swing.border.AbstractBorder;
-import javax.swing.border.EmptyBorder;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
@@ -35,52 +28,11 @@ public class Find extends javax.swing.JFrame {
         initComponents();
         mainFrame = (MainFrame) parent;
         this.setTitle("Find");
-        customFind();
+        DesignFind designFind = new DesignFind(this);
+        designFind.design();
         this.setResizable(false);
-    }
-
-    private void customFind() {
-        Font fieldFont = new Font("Lato", Font.PLAIN, 14);
-        txtFindWhat.setFont(fieldFont);
-        txtFindWhat.setBackground(Color.WHITE);
-        txtFindWhat.setForeground(new Color(100, 99, 99));
-        txtFindWhat.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
-                new EmptyBorder(new Insets(15, 25, 15, 25))));
-
-        rdbDown.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
-                new EmptyBorder(new Insets(15, 25, 15, 25))));
-
-        rdbUp.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
-                new EmptyBorder(new Insets(15, 25, 15, 25))));
-
-        btnFindNext.setFont(fieldFont);
-        btnFindNext.setBackground(Color.WHITE);
-        btnFindNext.setForeground(new Color(62, 156, 0));
-        btnFindNext.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
-                new EmptyBorder(new Insets(15, 25, 15, 25))));
-
-        btnCancel.setFont(fieldFont);
-        btnCancel.setBackground(Color.WHITE);
-        btnCancel.setForeground(new Color(177, 0, 17));
-        btnCancel.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
-                new EmptyBorder(new Insets(15, 25, 15, 25))));
-    }
-
-    //get current text pane
-    public JTextPane getCurrentTextPane(JTabbedPane jtpTable) {
-        JTextPane currentTextPane = null;
-        int index = jtpTable.getSelectedIndex();
-        if (index >= 0) {
-            JScrollPane scrollPane = (JScrollPane) jtpTable.getSelectedComponent();
-            JViewport viewport = scrollPane.getViewport();
-            currentTextPane = (JTextPane) viewport.getView();
-        }
-        return currentTextPane;
+        //click close don't close app
+        setDefaultCloseOperation(HIDE_ON_CLOSE);
     }
 
     @SuppressWarnings("unchecked")
@@ -221,7 +173,7 @@ public class Find extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnFindNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindNextActionPerformed
-        JTextPane textPane = getCurrentTextPane(mainFrame.getJtpTable());
+        JTextPane textPane = mainFrame.getCurrentTextPane(mainFrame.getJtpTable());
         if (textPane != null) {
             String find = txtFindWhat.getText();
             String text = "";
@@ -252,6 +204,7 @@ public class Find extends javax.swing.JFrame {
                     int selectEnd = index + find.length();
                     textPane.setSelectionStart(selectStart);
                     textPane.setSelectionEnd(selectEnd);
+                  
                     Highlighter highlight = textPane.getHighlighter();
                     highlight.removeAllHighlights();
                     highlight.addHighlight(selectStart, selectEnd, DefaultHighlighter.DefaultPainter);
@@ -321,21 +274,6 @@ public class Find extends javax.swing.JFrame {
         });
     }
 
-    @SuppressWarnings("serial")
-    class CustomeBorder extends AbstractBorder {
-
-        @Override
-        public void paintBorder(Component c, Graphics g, int x, int y,
-                int width, int height) {
-            // TODO Auto-generated method stubs
-            super.paintBorder(c, g, x, y, width, height);
-            Graphics2D g2d = (Graphics2D) g;
-            g2d.setStroke(new BasicStroke(12));
-            g2d.setColor(new Color(254, 224, 226));
-            g2d.drawRoundRect(x, y, width - 1, height - 1, 25, 25);
-        }
-    }
-
     class FieldListener implements ActionListener {
 
         @Override
@@ -344,6 +282,48 @@ public class Find extends javax.swing.JFrame {
         }
 
     }
+
+    public MainFrame getMainFrame() {
+        return mainFrame;
+    }
+
+    public JButton getBtnCancel() {
+        return btnCancel;
+    }
+
+    public JButton getBtnFindNext() {
+        return btnFindNext;
+    }
+
+    public JLabel getjLabel1() {
+        return jLabel1;
+    }
+
+    public JLabel getJlbFind() {
+        return jlbFind;
+    }
+
+    public JLabel getJlbFindWhat() {
+        return jlbFindWhat;
+    }
+
+    public JPanel getJpnBackground() {
+        return jpnBackground;
+    }
+
+    public JRadioButton getRdbDown() {
+        return rdbDown;
+    }
+
+    public JRadioButton getRdbUp() {
+        return rdbUp;
+    }
+
+    public JTextField getTxtFindWhat() {
+        return txtFindWhat;
+    }
+    
+    
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

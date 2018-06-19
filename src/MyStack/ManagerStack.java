@@ -22,15 +22,15 @@ public class ManagerStack {
 
     //if content in text change then push to stack
     public void changeContent() {
-        textPane.addCaretListener(new CaretListener() {
-            @Override
-            public void caretUpdate(CaretEvent ce) {
-                if (!textPane.getText().trim().isEmpty()
-                        && !textPane.getText().equalsIgnoreCase(undo.top())) {
-                    undo.push(textPane.getText());
+            textPane.addCaretListener(new CaretListener() {
+                @Override
+                public void caretUpdate(CaretEvent ce) {
+                    if (!textPane.getText().trim().isEmpty()
+                            && !textPane.getText().equalsIgnoreCase(undo.top())) {
+                        undo.push(textPane.getText());
+                    }
                 }
-            }
-        });
+            });
     }
 
     public void undo() {

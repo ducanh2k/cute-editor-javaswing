@@ -6,11 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
-import javax.swing.JViewport;
-import Guide.SaveAsFile;
 
 /**
  *
@@ -19,9 +16,10 @@ import Guide.SaveAsFile;
 public class SaveFile {
 
     //action save file
-    public void saveFile(JTabbedPane jtpTable, HashMap<JTextPane, File> hashMap) {
+    public void saveFile(JTabbedPane jtpTable, HashMap<JTextPane, File> hashMap,
+            MainFrame mainFrame) {
         if (jtpTable.getTabCount() > 0) {
-            JTextPane textPane = getCurrentTextPane(jtpTable);
+            JTextPane textPane = mainFrame.getCurrentTextPane(jtpTable);
             //get file
             File file = hashMap.get(textPane);
             if (file != null) {
@@ -48,20 +46,8 @@ public class SaveFile {
                 }
             } else {
                 SaveAsFile saveAsFile = new SaveAsFile();
-                saveAsFile.saveAsFile(jtpTable, hashMap);
+                saveAsFile.saveAsFile(jtpTable, hashMap, mainFrame);
             }
         }
-    }
-
-    //get current text pane
-    public JTextPane getCurrentTextPane(JTabbedPane jtpTable) {
-        JTextPane currentTextPane = null;
-        int index = jtpTable.getSelectedIndex();
-        if (index >= 0) {
-            JScrollPane scrollPane = (JScrollPane) jtpTable.getSelectedComponent();
-            JViewport viewport = scrollPane.getViewport();
-            currentTextPane = (JTextPane) viewport.getView();
-        }
-        return currentTextPane;
     }
 }
