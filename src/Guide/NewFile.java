@@ -37,7 +37,6 @@ public class NewFile {
         jtpTable.addTab(titleTab, iconWrite, scrollPane);
         int index = jtpTable.getTabCount() - 1;
         jtpTable.setSelectedIndex(index);
-//        textPanel.getDocument().addUndoableEditListener(undoManager);/////////////////////////////////////////////////////////////
         textPanel.getDocument().addDocumentListener(new TextChange(jtpTable));
         textPanel.requestFocus();
         return textPanel;

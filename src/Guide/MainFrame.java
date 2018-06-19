@@ -1,32 +1,25 @@
 package Guide;
 
-import MyTask.MyButton;
+import Guide.Design.DesignMainFrame;
+import MyStack.ManagerStack;
 import MyStack.MyStack;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import static java.awt.event.ActionEvent.ALT_MASK;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.File;
 import java.util.HashMap;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
 import javax.swing.JViewport;
 import javax.swing.KeyStroke;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Element;
@@ -41,90 +34,27 @@ import javax.swing.text.StyledDocument;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    int countFile = 0;
-    HashMap<JTextPane, File> hashMap;
-    Thread thread;
-    MyStack<String> stackUndo = new MyStack<>();
-    MyStack<String> stackRedo = new MyStack<>();
+    int countFile = 1;
+    HashMap<JTextPane, File> hmFile;
+    HashMap<Integer, ManagerStack> hmStack;
 
     //action cut, copy, paste
     Action copy = new DefaultEditorKit.CopyAction();
     Action paste = new DefaultEditorKit.PasteAction();
     Action cut = new DefaultEditorKit.CutAction();
+    DesignMainFrame design = new DesignMainFrame(this);
 
     public MainFrame() {
         this.getContentPane().setBackground(new Color(254, 242, 241));
         this.setTitle("CUTE EDITOR");
         initComponents();
-        designTask();
-        designText();
-        designTaskTop();
+        design.designTask();
+        design.designTaskTop();
+        design.designText();
+        design.animation();
         setSortcutKey();
-        hashMap = new HashMap<>();
-    }
-
-    private void changeContent() {
-        JTextPane textPane = getCurrentTextPane(jtpTable);
-        String textOrigin = textPane.getText();
-        if (textPane != null) {
-            textPane.addCaretListener(new CaretListener() {
-                @Override
-                public void caretUpdate(CaretEvent ce) {
-                    if (!textPane.getText().trim().isEmpty()
-                            && !textPane.getText().equalsIgnoreCase(stackUndo.top())) {
-                        stackUndo.push(textPane.getText());
-                    }
-                }
-            });
-        }
-    }
-
-    private void undo() {
-        JTextPane textPane = getCurrentTextPane(jtpTable);
-        stackRedo.push(stackUndo.pop());
-        textPane.setText(stackUndo.top());
-    }
-
-    private void redo() {
-        JTextPane textPane = getCurrentTextPane(jtpTable);
-        textPane.setText(stackRedo.pop());
-//        stackRedo.traverse();
-    }
-
-    private void designTask() {
-        setMyButton(btnNew, "src/Icon/new-file.png");
-        setMyButton(btnOpen, "src/Icon/open-file.png");
-        setMyButton(btnSave, "src/Icon/save.png");
-        setMyButton(btnSaveAs, "src/Icon/save-as.png");
-        setMyButton(btnNormalize, "src/Icon/normalize.png");
-        setMyButton(btnZip, "src/Icon/zip-file.png");
-        setMyButton(btnSetting, "src/Icon/setting.png");
-        setMyButton(btnClose, "src/Icon/close.png");
-        jpnTask.setBorder(BorderFactory.createMatteBorder(0, 3, 0, 0, Color.RED));
-        jpnTask.setBackground(new Color(252, 200, 196));
-    }
-
-    private void designText() {
-        jtpTable.setBorder(null);
-    }
-
-    private void designTaskTop() {
-        setMyButtonTop(btnBold, "src/Icon/bold.png");
-        setMyButtonTop(btnItalic, "src/Icon/italic.png");
-        setMyButtonTop(btnUnderLine, "src/Icon/underline.png");
-        setMyButtonTop(btnFind, "src/Icon/find.png");
-        setMyButtonTop(btnReplace, "src/Icon/replace.png");
-        setMyButtonTop(btnCode, "src/Icon/code.png");
-        setMyButtonTop(btnUndoNavigator, "src/Icon/undo.png");
-        setMyButtonTop(btnRedoNavigator, "src/Icon/redo.png");
-        setMyButtonTop(btnH1, "src/Icon/h1.png");
-        setMyButtonTop(btnH3, "src/Icon/h3.png");
-        setMyButtonTop(btnH2, "src/Icon/h2.png");
-        setMyButtonTop(splite1, "src/Icon/splite.png");
-        setMyButtonTop(splite2, "src/Icon/splite.png");
-        setMyButtonTop(splite3, "src/Icon/splite.png");
-        setMyButtonTop(splite4, "src/Icon/splite.png");
-        btnRedo.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.RED));
+        hmFile = new HashMap<>();
+        hmStack = new HashMap<Integer, ManagerStack>();
     }
 
     private void setSortcutKey() {
@@ -132,8 +62,14 @@ public class MainFrame extends javax.swing.JFrame {
         Action newFile = new AbstractAction("New File") {
             @Override
             public void actionPerformed(ActionEvent evt) {
+                MyStack<String> stackUndo = new MyStack<>();
+                MyStack<String> stackRedo = new MyStack<>();
                 NewFile newFile = new NewFile();
-                newFile.newTextPanel("Document " + ++countFile + " ", jtpTable);
+                JTextPane textpane = newFile.newTextPanel("Document " + countFile + " ", jtpTable);
+                ManagerStack managerStack = new ManagerStack(stackUndo, stackRedo, textpane);
+                managerStack.changeContent();
+                hmStack.put(countFile, managerStack);
+                countFile++;
             }
         };
         KeyStroke controlN = KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK);
@@ -147,7 +83,7 @@ public class MainFrame extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent evt) {
                 OpenFile openFile = new OpenFile();
-                openFile.openFile((MainFrame.this), jtpTable, hashMap);
+                openFile.openFile((MainFrame.this), jtpTable, hmFile);
             }
         };
         KeyStroke controlO = KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK);
@@ -161,7 +97,7 @@ public class MainFrame extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent evt) {
                 SaveFile saveFile = new SaveFile();
-                saveFile.saveFile(jtpTable, hashMap);
+                saveFile.saveFile(jtpTable, hmFile);
             }
         };
         KeyStroke controlS = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK);
@@ -175,7 +111,7 @@ public class MainFrame extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent evt) {
                 SaveAsFile saveAsFile = new SaveAsFile();
-                saveAsFile.saveAsFile(jtpTable, hashMap);
+                saveAsFile.saveAsFile(jtpTable, hmFile);
             }
         };
         KeyStroke controlAltS = KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK + ALT_MASK);
@@ -189,7 +125,7 @@ public class MainFrame extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent evt) {
                 CloseFile closeFile = new CloseFile();
-                closeFile.closeAllFile(jtpTable, MainFrame.this, hashMap);
+                closeFile.closeAllFile(jtpTable, MainFrame.this, hmFile);
                 countFile--;
             }
         };
@@ -198,30 +134,251 @@ public class MainFrame extends javax.swing.JFrame {
                 .put(controlW, "Close File");
         btnClose.getActionMap().put("Close File", closeFile);
         btnClose.addActionListener(closeFile);
-    }
 
-    public void setMyButton(JButton button, String pathIcon) {
-        button.setContentAreaFilled(false);
-        button.setBorder(new MyButton(2));
-        button.setForeground(new Color(220, 55, 43));
-        Icon i = new ImageIcon(pathIcon);
-        button.setIcon(i);
-    }
+        //Bold text
+        Action boldText = new AbstractAction("Bold Text") {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                JTextPane textPane = getCurrentTextPane(jtpTable);
+                String textSelected = textPane.getSelectedText();
+                StyledDocument doc = (StyledDocument) textPane.getDocument();
+                int selectionEnd = textPane.getSelectionEnd();
+                int selectionStart = textPane.getSelectionStart();
+                if (selectionStart == selectionEnd) {
+                    return;
+                }
+                Element element = doc.getCharacterElement(selectionStart);
+                AttributeSet as = element.getAttributes();
+                MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
+                StyleConstants.setBold(asNew, !StyleConstants.isBold(as));
+                doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
+            }
+        };
+        KeyStroke controlB = KeyStroke.getKeyStroke(KeyEvent.VK_B, InputEvent.CTRL_MASK);
+        btnBold.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(controlB, "Bold Text");
+        btnBold.getActionMap().put("Bold Text", boldText);
+        btnBold.addActionListener(boldText);
 
-    public void setMyButtonTop(JButton button, String pathIcon) {
-        button.setContentAreaFilled(false);
-        button.setBorder(new MyButton(0));
-        button.setForeground(Color.WHITE);
-        Icon i = new ImageIcon(pathIcon);
-        button.setIcon(i);
-    }
+        //Italic text
+        Action italicText = new AbstractAction("Italic Text") {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                JTextPane textPane = getCurrentTextPane(jtpTable);
+                String textSelected = textPane.getSelectedText();
+                StyledDocument doc = (StyledDocument) textPane.getDocument();
+                int selectionEnd = textPane.getSelectionEnd();
+                int selectionStart = textPane.getSelectionStart();
+                if (selectionStart == selectionEnd) {
+                    return;
+                }
+                Element element = doc.getCharacterElement(selectionStart);
+                AttributeSet as = element.getAttributes();
+                MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
+                StyleConstants.setItalic(asNew, !StyleConstants.isItalic(as));
+                doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
+            }
+        };
+        KeyStroke controlI = KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_MASK);
+        btnItalic.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(controlI, "Italic Text");
+        btnItalic.getActionMap().put("Italic Text", italicText);
+        btnItalic.addActionListener(italicText);
 
-    public void setMyButtonTopMouse(JButton button, String pathIcon) {
-        button.setContentAreaFilled(false);
-        button.setBorder(new MyButton(0));
-        button.setForeground(Color.WHITE);
-        Icon i = new ImageIcon(pathIcon);
-        button.setIcon(i);
+        //Underline text
+        Action underlineText = new AbstractAction("Underline Text") {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                JTextPane textPane = getCurrentTextPane(jtpTable);
+                String textSelected = textPane.getSelectedText();
+                StyledDocument doc = (StyledDocument) textPane.getDocument();
+                int selectionEnd = textPane.getSelectionEnd();
+                int selectionStart = textPane.getSelectionStart();
+                if (selectionStart == selectionEnd) {
+                    return;
+                }
+                Element element = doc.getCharacterElement(selectionStart);
+                AttributeSet as = element.getAttributes();
+                MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
+                StyleConstants.setUnderline(asNew, !StyleConstants.isUnderline(as));
+                doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
+            }
+        };
+        KeyStroke controlU = KeyStroke.getKeyStroke(KeyEvent.VK_U, InputEvent.CTRL_MASK);
+        btnUnderLine.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(controlU, "Underline Text");
+        btnUnderLine.getActionMap().put("Underline Text", underlineText);
+        btnUnderLine.addActionListener(underlineText);
+
+        //Header1 text
+        Action h1Text = new AbstractAction("Header1 Text") {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                JTextPane textPane = getCurrentTextPane(jtpTable);
+                String textSelected = textPane.getSelectedText();
+                StyledDocument doc = (StyledDocument) textPane.getDocument();
+                int selectionEnd = textPane.getSelectionEnd();
+                int selectionStart = textPane.getSelectionStart();
+                if (selectionStart == selectionEnd) {
+                    return;
+                }
+                Element element = doc.getCharacterElement(selectionStart);
+                AttributeSet as = element.getAttributes();
+                MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
+                StyleConstants.setFontSize(asNew, 24);
+                StyleConstants.setBold(asNew, !StyleConstants.isBold(as));
+                StyleConstants.setFontFamily(asNew, "Lato Black");
+                doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
+            }
+        };
+        KeyStroke control1 = KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.CTRL_MASK);
+        btnH1.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(control1, "Header1 Text");
+        btnH1.getActionMap().put("Header1 Text", h1Text);
+        btnH1.addActionListener(h1Text);
+
+        //Header2 text
+        Action h2Text = new AbstractAction("Header2 Text") {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                JTextPane textPane = getCurrentTextPane(jtpTable);
+                String textSelected = textPane.getSelectedText();
+                StyledDocument doc = (StyledDocument) textPane.getDocument();
+                int selectionEnd = textPane.getSelectionEnd();
+                int selectionStart = textPane.getSelectionStart();
+                if (selectionStart == selectionEnd) {
+                    return;
+                }
+                Element element = doc.getCharacterElement(selectionStart);
+                AttributeSet as = element.getAttributes();
+                MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
+                StyleConstants.setFontSize(asNew, 21);
+                StyleConstants.setBold(asNew, !StyleConstants.isBold(as));
+                StyleConstants.setFontFamily(asNew, "Lato Black");
+                doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
+            }
+        };
+        KeyStroke control2 = KeyStroke.getKeyStroke(KeyEvent.VK_2, InputEvent.CTRL_MASK);
+        btnH2.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(control1, "Header2 Text");
+        btnH2.getActionMap().put("Header2 Text", h2Text);
+        btnH2.addActionListener(h2Text);
+
+        //Header3 text
+        Action h3Text = new AbstractAction("Header3 Text") {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                JTextPane textPane = getCurrentTextPane(jtpTable);
+                String textSelected = textPane.getSelectedText();
+                StyledDocument doc = (StyledDocument) textPane.getDocument();
+                int selectionEnd = textPane.getSelectionEnd();
+                int selectionStart = textPane.getSelectionStart();
+                if (selectionStart == selectionEnd) {
+                    return;
+                }
+                Element element = doc.getCharacterElement(selectionStart);
+                AttributeSet as = element.getAttributes();
+                MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
+                StyleConstants.setFontSize(asNew, 18);
+                StyleConstants.setBold(asNew, !StyleConstants.isBold(as));
+                StyleConstants.setFontFamily(asNew, "Lato Black");
+                doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
+            }
+        };
+        KeyStroke control3 = KeyStroke.getKeyStroke(KeyEvent.VK_3, InputEvent.CTRL_MASK);
+        btnH3.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(control1, "Header3 Text");
+        btnH3.getActionMap().put("Header3 Text", h3Text);
+        btnH3.addActionListener(h3Text);
+
+        //find
+        Action find = new AbstractAction("Find Text") {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                Find find = new Find(MainFrame.this, false);
+                find.setLocationRelativeTo(MainFrame.this);
+                find.setVisible(true);
+            }
+        };
+        KeyStroke controlF = KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_MASK);
+        btnFind.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(control1, "Find Text");
+        btnFind.getActionMap().put("Find Text", find);
+        btnFind.addActionListener(find);
+
+        //replace
+        Action replace = new AbstractAction("Replace Text") {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                Replace replace = new Replace(MainFrame.this, false);
+                replace.setLocationRelativeTo(MainFrame.this);
+                replace.setVisible(true);
+            }
+        };
+        KeyStroke controlH = KeyStroke.getKeyStroke(KeyEvent.VK_H, InputEvent.CTRL_MASK);
+        btnReplace.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(control1, "Replace Text");
+        btnReplace.getActionMap().put("Replace Text", replace);
+        btnReplace.addActionListener(replace);
+
+        //undo
+        Action undo = new AbstractAction("Undo") {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                //get manager stack of tab current
+                ManagerStack managerStach = hmStack.get(jtpTable.getSelectedIndex() + 1);
+                managerStach.undo();
+            }
+        };
+        KeyStroke controlZ = KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_MASK);
+        btnUndoNavigator.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(control1, "Undo");
+        btnUndoNavigator.getActionMap().put("Undo", undo);
+        btnUndoNavigator.addActionListener(undo);
+
+        //redo
+        Action redo = new AbstractAction("Redo") {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                //get manager stack of tab current
+                ManagerStack managerStach = hmStack.get(jtpTable.getSelectedIndex() + 1);
+                managerStach.redo();
+            }
+        };
+        KeyStroke controlY = KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_MASK);
+        btnRedoNavigator.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(control1, "Redo");
+        btnRedoNavigator.getActionMap().put("Redo", redo);
+        btnRedoNavigator.addActionListener(redo);
+
+        //code
+        Action code = new AbstractAction("Code") {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                JTextPane textPane = getCurrentTextPane(jtpTable);
+                String textSelected = textPane.getSelectedText();
+                StyledDocument doc = (StyledDocument) textPane.getDocument();
+                int selectionEnd = textPane.getSelectionEnd();
+                int selectionStart = textPane.getSelectionStart();
+                if (selectionStart == selectionEnd) {
+                    return;
+                }
+                Element element = doc.getCharacterElement(selectionStart);
+                AttributeSet as = element.getAttributes();
+                MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
+                StyleConstants.setFontSize(asNew, 14);
+                StyleConstants.setFontFamily(asNew, "Roboto");
+                StyleConstants.setBold(asNew, false);
+                StyleConstants.setItalic(asNew, false);
+                StyleConstants.setUnderline(asNew, false);
+                doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
+            }
+        };
+        KeyStroke controlG = KeyStroke.getKeyStroke(KeyEvent.VK_G, InputEvent.CTRL_MASK);
+        btnCode.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(control1, "Redo");
+        btnCode.getActionMap().put("Redo", code);
+        btnCode.addActionListener(code);
     }
 
     @SuppressWarnings("unchecked")
@@ -258,145 +415,7 @@ public class MainFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
 
-        jpnTask.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                jpnTaskMouseMoved(evt);
-            }
-        });
-        jpnTask.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                jpnTaskMouseExited(evt);
-            }
-        });
-
         btnNew.setToolTipText("");
-        btnNew.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnNewMouseMoved(evt);
-            }
-        });
-        btnNew.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnNewMouseExited(evt);
-            }
-        });
-        btnNew.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNewActionPerformed(evt);
-            }
-        });
-
-        btnOpen.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnOpenMouseMoved(evt);
-            }
-        });
-        btnOpen.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnOpenMouseExited(evt);
-            }
-        });
-        btnOpen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOpenActionPerformed(evt);
-            }
-        });
-
-        btnSave.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnSaveMouseMoved(evt);
-            }
-        });
-        btnSave.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnSaveMouseExited(evt);
-            }
-        });
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
-            }
-        });
-
-        btnSaveAs.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnSaveAsMouseMoved(evt);
-            }
-        });
-        btnSaveAs.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnSaveAsMouseExited(evt);
-            }
-        });
-        btnSaveAs.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveAsActionPerformed(evt);
-            }
-        });
-
-        btnClose.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnCloseMouseMoved(evt);
-            }
-        });
-        btnClose.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnCloseMouseExited(evt);
-            }
-        });
-        btnClose.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCloseActionPerformed(evt);
-            }
-        });
-
-        btnNormalize.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnNormalizeMouseMoved(evt);
-            }
-        });
-        btnNormalize.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnNormalizeMouseExited(evt);
-            }
-        });
-        btnNormalize.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNormalizeActionPerformed(evt);
-            }
-        });
-
-        btnZip.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnZipMouseMoved(evt);
-            }
-        });
-        btnZip.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnZipMouseExited(evt);
-            }
-        });
-        btnZip.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnZipActionPerformed(evt);
-            }
-        });
-
-        btnSetting.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnSettingMouseMoved(evt);
-            }
-        });
-        btnSetting.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnSettingMouseExited(evt);
-            }
-        });
-        btnSetting.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSettingActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jpnTaskLayout = new javax.swing.GroupLayout(jpnTask);
         jpnTask.setLayout(jpnTaskLayout);
@@ -440,259 +459,34 @@ public class MainFrame extends javax.swing.JFrame {
         btnRedo.setBackground(new java.awt.Color(255, 255, 255));
 
         btnBold.setToolTipText("");
-        btnBold.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnBoldMouseMoved(evt);
-            }
-        });
-        btnBold.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnBoldMouseExited(evt);
-            }
-        });
-        btnBold.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBoldActionPerformed(evt);
-            }
-        });
 
         btnItalic.setToolTipText("");
-        btnItalic.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnItalicMouseMoved(evt);
-            }
-        });
-        btnItalic.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnItalicMouseExited(evt);
-            }
-        });
-        btnItalic.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnItalicActionPerformed(evt);
-            }
-        });
 
         btnUnderLine.setToolTipText("");
-        btnUnderLine.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnUnderLineMouseMoved(evt);
-            }
-        });
-        btnUnderLine.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnUnderLineMouseExited(evt);
-            }
-        });
-        btnUnderLine.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUnderLineActionPerformed(evt);
-            }
-        });
 
         btnFind.setToolTipText("");
-        btnFind.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnFindMouseMoved(evt);
-            }
-        });
-        btnFind.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnFindMouseExited(evt);
-            }
-        });
-        btnFind.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFindActionPerformed(evt);
-            }
-        });
 
         btnReplace.setToolTipText("");
-        btnReplace.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnReplaceMouseMoved(evt);
-            }
-        });
-        btnReplace.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnReplaceMouseExited(evt);
-            }
-        });
-        btnReplace.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReplaceActionPerformed(evt);
-            }
-        });
 
         btnCode.setToolTipText("");
-        btnCode.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnCodeMouseMoved(evt);
-            }
-        });
-        btnCode.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnCodeMouseExited(evt);
-            }
-        });
-        btnCode.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCodeActionPerformed(evt);
-            }
-        });
 
         btnUndoNavigator.setToolTipText("");
-        btnUndoNavigator.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnUndoNavigatorMouseMoved(evt);
-            }
-        });
-        btnUndoNavigator.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnUndoNavigatorMouseExited(evt);
-            }
-        });
-        btnUndoNavigator.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUndoNavigatorActionPerformed(evt);
-            }
-        });
 
         btnRedoNavigator.setToolTipText("");
-        btnRedoNavigator.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnRedoNavigatorMouseMoved(evt);
-            }
-        });
-        btnRedoNavigator.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnRedoNavigatorMouseExited(evt);
-            }
-        });
-        btnRedoNavigator.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRedoNavigatorActionPerformed(evt);
-            }
-        });
 
         splite1.setToolTipText("");
-        splite1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                splite1MouseMoved(evt);
-            }
-        });
-        splite1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                splite1MouseExited(evt);
-            }
-        });
-        splite1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                splite1ActionPerformed(evt);
-            }
-        });
 
         splite2.setToolTipText("");
-        splite2.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                splite2MouseMoved(evt);
-            }
-        });
-        splite2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                splite2MouseExited(evt);
-            }
-        });
-        splite2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                splite2ActionPerformed(evt);
-            }
-        });
 
         splite3.setToolTipText("");
-        splite3.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                splite3MouseMoved(evt);
-            }
-        });
-        splite3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                splite3MouseExited(evt);
-            }
-        });
-        splite3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                splite3ActionPerformed(evt);
-            }
-        });
 
         splite4.setToolTipText("");
-        splite4.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                splite4MouseMoved(evt);
-            }
-        });
-        splite4.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                splite4MouseExited(evt);
-            }
-        });
-        splite4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                splite4ActionPerformed(evt);
-            }
-        });
 
         btnH1.setToolTipText("");
-        btnH1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnH1MouseMoved(evt);
-            }
-        });
-        btnH1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnH1MouseExited(evt);
-            }
-        });
-        btnH1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnH1ActionPerformed(evt);
-            }
-        });
 
         btnH3.setToolTipText("");
-        btnH3.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnH3MouseMoved(evt);
-            }
-        });
-        btnH3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnH3MouseExited(evt);
-            }
-        });
-        btnH3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnH3ActionPerformed(evt);
-            }
-        });
 
         btnH2.setToolTipText("");
-        btnH2.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnH2MouseMoved(evt);
-            }
-        });
-        btnH2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnH2MouseExited(evt);
-            }
-        });
-        btnH2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnH2ActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout btnRedoLayout = new javax.swing.GroupLayout(btnRedo);
         btnRedo.setLayout(btnRedoLayout);
@@ -782,453 +576,6 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
-        btnNew.setText("New File  ");
-        Font font = new Font("Verdana", Font.BOLD, 12);
-        btnNew.setForeground(new Color(114, 16, 6));
-        btnNew.setFont(font);
-        changeContent();
-    }//GEN-LAST:event_btnNewActionPerformed
-
-    private void btnNewMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNewMouseMoved
-        btnNew.setText("New File  ");
-        Font font = new Font("Verdana", Font.BOLD, 12);
-        btnNew.setForeground(new Color(211, 36, 23));
-        btnNew.setFont(font);
-    }//GEN-LAST:event_btnNewMouseMoved
-
-    private void btnNewMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNewMouseExited
-        btnNew.setText("");
-    }//GEN-LAST:event_btnNewMouseExited
-
-    private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
-        btnOpen.setText("Open File  ");
-        Font font = new Font("Verdana", Font.BOLD, 12);
-        btnOpen.setForeground(new Color(114, 16, 6));
-        btnOpen.setFont(font);
-    }//GEN-LAST:event_btnOpenActionPerformed
-
-    private void btnOpenMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnOpenMouseMoved
-        btnOpen.setText("Open File  ");
-        Font font = new Font("Verdana", Font.BOLD, 12);
-        btnOpen.setForeground(new Color(211, 36, 23));
-        btnOpen.setFont(font);
-    }//GEN-LAST:event_btnOpenMouseMoved
-
-    private void btnOpenMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnOpenMouseExited
-        btnOpen.setText("");
-    }//GEN-LAST:event_btnOpenMouseExited
-
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        btnSave.setText("Save File  ");
-        Font font = new Font("Verdana", Font.BOLD, 12);
-        btnSave.setForeground(new Color(114, 16, 6));
-        btnSave.setFont(font);
-    }//GEN-LAST:event_btnSaveActionPerformed
-
-    private void btnSaveMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSaveMouseMoved
-        btnSave.setText("Save File  ");
-        Font font = new Font("Verdana", Font.BOLD, 12);
-        btnSave.setForeground(new Color(211, 36, 23));
-        btnSave.setFont(font);
-    }//GEN-LAST:event_btnSaveMouseMoved
-
-    private void btnSaveMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSaveMouseExited
-        btnSave.setText("");
-    }//GEN-LAST:event_btnSaveMouseExited
-
-    private void btnSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveAsActionPerformed
-        btnSaveAs.setText("Save As File  ");
-        Font font = new Font("Verdana", Font.BOLD, 12);
-        btnSaveAs.setForeground(new Color(114, 16, 6));
-        btnSaveAs.setFont(font);
-    }//GEN-LAST:event_btnSaveAsActionPerformed
-
-    private void btnSaveAsMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSaveAsMouseMoved
-        btnSaveAs.setText("Save As File  ");
-        Font font = new Font("Verdana", Font.BOLD, 12);
-        btnSaveAs.setForeground(new Color(211, 36, 23));
-        btnSaveAs.setFont(font);
-    }//GEN-LAST:event_btnSaveAsMouseMoved
-
-    private void btnSaveAsMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSaveAsMouseExited
-        btnSaveAs.setText("");
-    }//GEN-LAST:event_btnSaveAsMouseExited
-
-    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
-        btnClose.setText("Exit  ");
-        Font font = new Font("Verdana", Font.BOLD, 12);
-        btnClose.setForeground(new Color(114, 16, 6));
-        btnClose.setFont(font);
-    }//GEN-LAST:event_btnCloseActionPerformed
-
-    private void btnCloseMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCloseMouseMoved
-        btnClose.setText("Exit  ");
-        Font font = new Font("Verdana", Font.BOLD, 12);
-        btnClose.setForeground(new Color(211, 36, 23));
-        btnClose.setFont(font);
-    }//GEN-LAST:event_btnCloseMouseMoved
-
-    private void btnCloseMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCloseMouseExited
-        btnClose.setText("");
-    }//GEN-LAST:event_btnCloseMouseExited
-
-    private void btnNormalizeMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNormalizeMouseMoved
-        btnNormalize.setText("Normalize  ");
-        Font font = new Font("Verdana", Font.BOLD, 12);
-        btnNormalize.setForeground(new Color(211, 36, 23));
-        btnNormalize.setFont(font);
-    }//GEN-LAST:event_btnNormalizeMouseMoved
-
-    private void btnNormalizeMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNormalizeMouseExited
-        btnNormalize.setText("");
-    }//GEN-LAST:event_btnNormalizeMouseExited
-
-    private void btnNormalizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNormalizeActionPerformed
-        btnNormalize.setText("Normalize  ");
-        Font font = new Font("Verdana", Font.BOLD, 12);
-        btnNormalize.setForeground(new Color(114, 16, 6));
-        btnNormalize.setFont(font);
-        if (jtpTable.getTabCount() > 0) {
-            JTextPane textPane = getCurrentTextPane(jtpTable);
-            String content = textPane.getText();
-            Normalize normalize = new Normalize(content);
-            content = normalize.normalize();
-            textPane.setText(content);
-        }
-    }//GEN-LAST:event_btnNormalizeActionPerformed
-
-    private void btnZipMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnZipMouseMoved
-        btnZip.setText("Zip File  ");
-        Font font = new Font("Verdana", Font.BOLD, 12);
-        btnZip.setForeground(new Color(211, 36, 23));
-        btnZip.setFont(font);
-    }//GEN-LAST:event_btnZipMouseMoved
-
-    private void btnZipMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnZipMouseExited
-        btnZip.setText("");
-    }//GEN-LAST:event_btnZipMouseExited
-
-    private void btnZipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZipActionPerformed
-        btnZip.setText("Zip File  ");
-        Font font = new Font("Verdana", Font.BOLD, 12);
-        btnZip.setForeground(new Color(114, 16, 6));
-        btnZip.setFont(font);
-    }//GEN-LAST:event_btnZipActionPerformed
-
-    private void btnSettingMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSettingMouseMoved
-        btnSetting.setText("Setting  ");
-        Font font = new Font("Verdana", Font.BOLD, 12);
-        btnSetting.setForeground(new Color(211, 36, 23));
-        btnSetting.setFont(font);
-    }//GEN-LAST:event_btnSettingMouseMoved
-
-    private void btnSettingMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSettingMouseExited
-        btnSetting.setText("");
-    }//GEN-LAST:event_btnSettingMouseExited
-
-    private void btnSettingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSettingActionPerformed
-        btnSetting.setText("Setting  ");
-        Font font = new Font("Verdana", Font.BOLD, 12);
-        btnSetting.setForeground(new Color(114, 16, 6));
-        btnSetting.setFont(font);
-        Setting setting = new Setting(this, false);
-        setting.setLocationRelativeTo(this);
-        setting.setVisible(true);
-    }//GEN-LAST:event_btnSettingActionPerformed
-
-    private void jpnTaskMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpnTaskMouseExited
-        jpnTask.setBorder(BorderFactory.createMatteBorder(0, 3, 0, 0, Color.RED));
-        jpnTask.setBackground(new Color(253, 216, 213));
-    }//GEN-LAST:event_jpnTaskMouseExited
-
-    private void jpnTaskMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpnTaskMouseMoved
-        jpnTask.setBorder(BorderFactory.createMatteBorder(0, 3, 0, 0, Color.RED));
-        jpnTask.setBackground(new Color(252, 200, 196));
-    }//GEN-LAST:event_jpnTaskMouseMoved
-
-    private void btnBoldMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBoldMouseMoved
-        setMyButtonTopMouse(btnBold, "src/Icon/bold-mouse.png");
-    }//GEN-LAST:event_btnBoldMouseMoved
-
-    private void btnBoldMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBoldMouseExited
-        setMyButtonTopMouse(btnBold, "src/Icon/bold.png");
-    }//GEN-LAST:event_btnBoldMouseExited
-
-    private void btnBoldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBoldActionPerformed
-        JTextPane textPane = getCurrentTextPane(jtpTable);
-        String textSelected = textPane.getSelectedText();
-        StyledDocument doc = (StyledDocument) textPane.getDocument();
-        int selectionEnd = textPane.getSelectionEnd();
-        int selectionStart = textPane.getSelectionStart();
-        if (selectionStart == selectionEnd) {
-            return;
-        }
-        Element element = doc.getCharacterElement(selectionStart);
-        AttributeSet as = element.getAttributes();
-        MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
-        StyleConstants.setBold(asNew, !StyleConstants.isBold(as));
-        doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
-
-
-    }//GEN-LAST:event_btnBoldActionPerformed
-
-
-    private void btnItalicMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnItalicMouseMoved
-        setMyButtonTopMouse(btnItalic, "src/Icon/italic-mouse.png");
-    }//GEN-LAST:event_btnItalicMouseMoved
-
-    private void btnItalicMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnItalicMouseExited
-        setMyButtonTopMouse(btnItalic, "src/Icon/italic.png");
-    }//GEN-LAST:event_btnItalicMouseExited
-
-    private void btnItalicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnItalicActionPerformed
-        JTextPane textPane = getCurrentTextPane(jtpTable);
-        String textSelected = textPane.getSelectedText();
-        StyledDocument doc = (StyledDocument) textPane.getDocument();
-        int selectionEnd = textPane.getSelectionEnd();
-        int selectionStart = textPane.getSelectionStart();
-        if (selectionStart == selectionEnd) {
-            return;
-        }
-        Element element = doc.getCharacterElement(selectionStart);
-        AttributeSet as = element.getAttributes();
-        MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
-        StyleConstants.setItalic(asNew, !StyleConstants.isItalic(as));
-        doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
-    }//GEN-LAST:event_btnItalicActionPerformed
-
-    private void btnUnderLineMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUnderLineMouseMoved
-        setMyButtonTopMouse(btnUnderLine, "src/Icon/underline-mouse.png");
-    }//GEN-LAST:event_btnUnderLineMouseMoved
-
-    private void btnUnderLineMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUnderLineMouseExited
-        setMyButtonTopMouse(btnUnderLine, "src/Icon/underline.png");
-    }//GEN-LAST:event_btnUnderLineMouseExited
-
-    private void btnUnderLineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnderLineActionPerformed
-        JTextPane textPane = getCurrentTextPane(jtpTable);
-        String textSelected = textPane.getSelectedText();
-        StyledDocument doc = (StyledDocument) textPane.getDocument();
-        int selectionEnd = textPane.getSelectionEnd();
-        int selectionStart = textPane.getSelectionStart();
-        if (selectionStart == selectionEnd) {
-            return;
-        }
-        Element element = doc.getCharacterElement(selectionStart);
-        AttributeSet as = element.getAttributes();
-        MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
-        StyleConstants.setUnderline(asNew, !StyleConstants.isUnderline(as));
-        doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
-    }//GEN-LAST:event_btnUnderLineActionPerformed
-
-    private void btnFindMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFindMouseMoved
-        setMyButtonTopMouse(btnFind, "src/Icon/find-mouse.png");
-    }//GEN-LAST:event_btnFindMouseMoved
-
-    private void btnFindMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFindMouseExited
-        setMyButtonTopMouse(btnFind, "src/Icon/find.png");
-    }//GEN-LAST:event_btnFindMouseExited
-
-    private void btnFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindActionPerformed
-        Find find = new Find(this, false);
-        find.setLocationRelativeTo(this);
-        find.setVisible(true);
-    }//GEN-LAST:event_btnFindActionPerformed
-
-    private void btnReplaceMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReplaceMouseMoved
-        setMyButtonTopMouse(btnReplace, "src/Icon/replace-mouse.png");
-    }//GEN-LAST:event_btnReplaceMouseMoved
-
-    private void btnReplaceMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReplaceMouseExited
-        setMyButtonTop(btnReplace, "src/Icon/replace.png");
-    }//GEN-LAST:event_btnReplaceMouseExited
-
-    private void btnReplaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReplaceActionPerformed
-        Replace replace = new Replace(this, false);
-        replace.setLocationRelativeTo(this);
-        replace.setVisible(true);
-    }//GEN-LAST:event_btnReplaceActionPerformed
-
-    private void btnCodeMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCodeMouseMoved
-        setMyButtonTopMouse(btnCode, "src/Icon/code-mouse.png");
-    }//GEN-LAST:event_btnCodeMouseMoved
-
-    private void btnCodeMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCodeMouseExited
-        setMyButtonTopMouse(btnCode, "src/Icon/code.png");
-    }//GEN-LAST:event_btnCodeMouseExited
-
-    private void btnCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCodeActionPerformed
-        JTextPane textPane = getCurrentTextPane(jtpTable);
-        String textSelected = textPane.getSelectedText();
-        StyledDocument doc = (StyledDocument) textPane.getDocument();
-        int selectionEnd = textPane.getSelectionEnd();
-        int selectionStart = textPane.getSelectionStart();
-        if (selectionStart == selectionEnd) {
-            return;
-        }
-        Element element = doc.getCharacterElement(selectionStart);
-        AttributeSet as = element.getAttributes();
-        MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
-        StyleConstants.setFontSize(asNew, 14);
-        StyleConstants.setFontFamily(asNew, "Roboto");
-        StyleConstants.setBold(asNew, false);
-        StyleConstants.setItalic(asNew, false);
-        StyleConstants.setUnderline(asNew, false);
-        doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
-    }//GEN-LAST:event_btnCodeActionPerformed
-
-    private void btnUndoNavigatorMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUndoNavigatorMouseMoved
-        setMyButtonTopMouse(btnUndoNavigator, "src/Icon/undo-mouse.png");
-    }//GEN-LAST:event_btnUndoNavigatorMouseMoved
-
-    private void btnUndoNavigatorMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUndoNavigatorMouseExited
-        setMyButtonTopMouse(btnUndoNavigator, "src/Icon/undo.png");
-    }//GEN-LAST:event_btnUndoNavigatorMouseExited
-    int i = 0;
-    private void btnUndoNavigatorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUndoNavigatorActionPerformed
-        undo();
-    }//GEN-LAST:event_btnUndoNavigatorActionPerformed
-
-    private void btnRedoNavigatorMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRedoNavigatorMouseMoved
-        setMyButtonTopMouse(btnRedoNavigator, "src/Icon/redo-mouse.png");
-    }//GEN-LAST:event_btnRedoNavigatorMouseMoved
-
-    private void btnRedoNavigatorMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRedoNavigatorMouseExited
-        setMyButtonTopMouse(btnRedoNavigator, "src/Icon/redo.png");
-    }//GEN-LAST:event_btnRedoNavigatorMouseExited
-
-    private void btnRedoNavigatorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRedoNavigatorActionPerformed
-
-        redo();
-    }//GEN-LAST:event_btnRedoNavigatorActionPerformed
-
-    private void splite1MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_splite1MouseMoved
-        // TODO add your handling code here:
-    }//GEN-LAST:event_splite1MouseMoved
-
-    private void splite1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_splite1MouseExited
-        // TODO add your handling code here:
-    }//GEN-LAST:event_splite1MouseExited
-
-    private void splite1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_splite1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_splite1ActionPerformed
-
-    private void splite2MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_splite2MouseMoved
-        // TODO add your handling code here:
-    }//GEN-LAST:event_splite2MouseMoved
-
-    private void splite2MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_splite2MouseExited
-        // TODO add your handling code here:
-    }//GEN-LAST:event_splite2MouseExited
-
-    private void splite2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_splite2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_splite2ActionPerformed
-
-    private void splite3MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_splite3MouseMoved
-        // TODO add your handling code here:
-    }//GEN-LAST:event_splite3MouseMoved
-
-    private void splite3MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_splite3MouseExited
-        // TODO add your handling code here:
-    }//GEN-LAST:event_splite3MouseExited
-
-    private void splite3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_splite3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_splite3ActionPerformed
-
-    private void splite4MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_splite4MouseMoved
-        // TODO add your handling code here:
-    }//GEN-LAST:event_splite4MouseMoved
-
-    private void splite4MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_splite4MouseExited
-        // TODO add your handling code here:
-    }//GEN-LAST:event_splite4MouseExited
-
-    private void splite4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_splite4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_splite4ActionPerformed
-
-    private void btnH1MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnH1MouseMoved
-        setMyButtonTopMouse(btnH1, "src/Icon/h1-mouse.png");
-    }//GEN-LAST:event_btnH1MouseMoved
-
-    private void btnH1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnH1MouseExited
-        setMyButtonTopMouse(btnH1, "src/Icon/h1.png");
-    }//GEN-LAST:event_btnH1MouseExited
-
-    private void btnH1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnH1ActionPerformed
-        JTextPane textPane = getCurrentTextPane(jtpTable);
-        String textSelected = textPane.getSelectedText();
-        StyledDocument doc = (StyledDocument) textPane.getDocument();
-        int selectionEnd = textPane.getSelectionEnd();
-        int selectionStart = textPane.getSelectionStart();
-        if (selectionStart == selectionEnd) {
-            return;
-        }
-        Element element = doc.getCharacterElement(selectionStart);
-        AttributeSet as = element.getAttributes();
-        MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
-        StyleConstants.setFontSize(asNew, 24);
-        StyleConstants.setBold(asNew, !StyleConstants.isBold(as));
-        StyleConstants.setFontFamily(asNew, "Lato Black");
-        doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
-    }//GEN-LAST:event_btnH1ActionPerformed
-
-    private void btnH3MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnH3MouseMoved
-        setMyButtonTopMouse(btnH3, "src/Icon/h3-mouse.png");
-    }//GEN-LAST:event_btnH3MouseMoved
-
-    private void btnH3MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnH3MouseExited
-        setMyButtonTopMouse(btnH3, "src/Icon/h3.png");
-    }//GEN-LAST:event_btnH3MouseExited
-
-    private void btnH3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnH3ActionPerformed
-        JTextPane textPane = getCurrentTextPane(jtpTable);
-        String textSelected = textPane.getSelectedText();
-        StyledDocument doc = (StyledDocument) textPane.getDocument();
-        int selectionEnd = textPane.getSelectionEnd();
-        int selectionStart = textPane.getSelectionStart();
-        if (selectionStart == selectionEnd) {
-            return;
-        }
-        Element element = doc.getCharacterElement(selectionStart);
-        AttributeSet as = element.getAttributes();
-        MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
-        StyleConstants.setFontSize(asNew, 18);
-        StyleConstants.setBold(asNew, !StyleConstants.isBold(as));
-        StyleConstants.setFontFamily(asNew, "Lato Black");
-        doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
-    }//GEN-LAST:event_btnH3ActionPerformed
-
-    private void btnH2MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnH2MouseMoved
-        setMyButtonTopMouse(btnH2, "src/Icon/h2-mouse.png");
-    }//GEN-LAST:event_btnH2MouseMoved
-
-    private void btnH2MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnH2MouseExited
-        setMyButtonTopMouse(btnH2, "src/Icon/h2.png");
-    }//GEN-LAST:event_btnH2MouseExited
-
-    private void btnH2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnH2ActionPerformed
-        JTextPane textPane = getCurrentTextPane(jtpTable);
-        String textSelected = textPane.getSelectedText();
-        StyledDocument doc = (StyledDocument) textPane.getDocument();
-        int selectionEnd = textPane.getSelectionEnd();
-        int selectionStart = textPane.getSelectionStart();
-        if (selectionStart == selectionEnd) {
-            return;
-        }
-        Element element = doc.getCharacterElement(selectionStart);
-        AttributeSet as = element.getAttributes();
-        MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
-        StyleConstants.setFontSize(asNew, 21);
-        StyleConstants.setBold(asNew, !StyleConstants.isBold(as));
-        StyleConstants.setFontFamily(asNew, "Lato Black");
-        doc.setCharacterAttributes(selectionStart, textPane.getSelectedText().length(), asNew, true);
-    }//GEN-LAST:event_btnH2ActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -1279,6 +626,106 @@ public class MainFrame extends javax.swing.JFrame {
             currentTextPane = (JTextPane) viewport.getView();
         }
         return currentTextPane;
+    }
+
+    public JButton getBtnBold() {
+        return btnBold;
+    }
+
+    public JButton getBtnClose() {
+        return btnClose;
+    }
+
+    public JButton getBtnCode() {
+        return btnCode;
+    }
+
+    public JButton getBtnFind() {
+        return btnFind;
+    }
+
+    public JButton getBtnH1() {
+        return btnH1;
+    }
+
+    public JButton getBtnH2() {
+        return btnH2;
+    }
+
+    public JButton getBtnH3() {
+        return btnH3;
+    }
+
+    public JButton getBtnItalic() {
+        return btnItalic;
+    }
+
+    public JButton getBtnNew() {
+        return btnNew;
+    }
+
+    public JButton getBtnNormalize() {
+        return btnNormalize;
+    }
+
+    public JButton getBtnOpen() {
+        return btnOpen;
+    }
+
+    public JPanel getBtnRedo() {
+        return btnRedo;
+    }
+
+    public JButton getBtnRedoNavigator() {
+        return btnRedoNavigator;
+    }
+
+    public JButton getBtnReplace() {
+        return btnReplace;
+    }
+
+    public JButton getBtnSave() {
+        return btnSave;
+    }
+
+    public JButton getBtnSaveAs() {
+        return btnSaveAs;
+    }
+
+    public JButton getBtnSetting() {
+        return btnSetting;
+    }
+
+    public JButton getBtnUnderLine() {
+        return btnUnderLine;
+    }
+
+    public JButton getBtnUndoNavigator() {
+        return btnUndoNavigator;
+    }
+
+    public JButton getBtnZip() {
+        return btnZip;
+    }
+
+    public JPanel getJpnTask() {
+        return jpnTask;
+    }
+
+    public JButton getSplite1() {
+        return splite1;
+    }
+
+    public JButton getSplite2() {
+        return splite2;
+    }
+
+    public JButton getSplite3() {
+        return splite3;
+    }
+
+    public JButton getSplite4() {
+        return splite4;
     }
 
 
