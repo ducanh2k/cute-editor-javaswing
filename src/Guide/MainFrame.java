@@ -14,6 +14,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -84,6 +85,13 @@ public class MainFrame extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent evt) {
                 OpenFile openFile = new OpenFile();
                 openFile.openFile((MainFrame.this), jtpTable, hmFile);
+                MyStack<String> stackUndo = new MyStack<>();
+                MyStack<String> stackRedo = new MyStack<>();
+                JTextPane textpane = getCurrentTextPane(jtpTable);
+                ManagerStack managerStack = new ManagerStack(stackUndo, stackRedo, textpane);
+                managerStack.changeContent();
+                hmStack.put(countFile, managerStack);
+                countFile++;
             }
         };
         KeyStroke controlO = KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK);
@@ -420,6 +428,25 @@ public class MainFrame extends javax.swing.JFrame {
                 .put(control1, "Setting");
         btnSetting.getActionMap().put("Setting", setting);
         btnSetting.addActionListener(setting);
+
+        //zipfile
+        Action zipFile = new AbstractAction("Setting") {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                try {
+                    ZipFile zipFile = new ZipFile(jtpTable, hmFile, MainFrame.this);
+                    zipFile.zipFile();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "Please save file before zipfile!!!");
+                }
+
+            }
+        };
+        KeyStroke controlL = KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_MASK);
+        btnZip.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(control1, "Zip File");
+        btnZip.getActionMap().put("Zip File", zipFile);
+        btnZip.addActionListener(zipFile);
     }
 
     @SuppressWarnings("unchecked")
