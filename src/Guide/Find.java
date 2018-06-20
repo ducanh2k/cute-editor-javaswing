@@ -1,6 +1,6 @@
 package Guide;
 
-import Guide.Design.DesignFind;
+import Design.DesignFind;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.logging.Level;

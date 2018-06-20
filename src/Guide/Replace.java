@@ -1,7 +1,7 @@
 package Guide;
 
-import Guide.Design.DesignFind;
-import Guide.Design.DesignReplace;
+import Design.DesignFind;
+import Design.DesignReplace;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;

@@ -1,6 +1,6 @@
 package Guide;
 
-import Guide.Design.DesignSetting;
+import Design.DesignSetting;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;

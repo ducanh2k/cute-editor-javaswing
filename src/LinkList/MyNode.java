@@ -1,7 +1,4 @@
 package LinkList;
-
-
-
 /**
  *
  * @author thaycacac

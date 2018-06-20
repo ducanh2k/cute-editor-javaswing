@@ -1,6 +1,6 @@
 package Guide;
 
-import Guide.Design.DesignMainFrame;
+import Design.DesignMainFrame;
 import MyStack.ManagerStack;
 import MyStack.MyStack;
 import java.awt.Color;
