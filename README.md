@@ -1,25 +1,57 @@
 # **CUTE EDITOR**
-### **Inserting Code Block**
-**Try it out:** insert a **Javascript** block by typing **<js>** or **<javascript>** on the line below (has to be on an empty line):
 
-Then try typing in some Javascript code in the block you inserted. It'll be properly syntaxed like:
-```javascript
-var str = "Hello World";
+### **Introduction**
+This document provides an overview of the a text editor, it had been used learned knowledge in CSD201 as ArrayList, LinkedList, Stack, ...
+
+### **Information**
+Project name: Cute Editor
+Project type:	Java Application
+Author:	Pham Ngoc Hoa
+Timeline:  From June 15th, 2018 to June 20th, 2018
+The project incluce:
+•	6 package: Guide, Design, Icon, LinkList, MyCustom and MyStack with map
+•	22 class 
+•	41 image
+
+### **Interface**
+
+![Image](C:\Users\THAYCACAC\Desktop/medley/resources/SJeN4NItZX_BJf18IF-m.jpg)
+
+
+### **Function**
+- **New File**
+- **Open File**
+- **Save File**
+- **Save As File**
+- **Zip File**
+- **Setting**
+- **Close File**
+- **Copy, Past, Delete**
+- **Bold, Italic, Underline**
+- **Find**
+- **Replace**
+- **Undo/ Redo**
+### **Undo redo use Stack**
+```java
+public void changeContent() {
+            textPane.addCaretListener(new CaretListener() {
+                @Override
+                public void caretUpdate(CaretEvent ce) {
+                    if (!textPane.getText().trim().isEmpty()
+                            && !textPane.getText().equalsIgnoreCase(undo.top())) {
+                        undo.push(textPane.getText());
+                    }
+                }
+            });
+    }
+
+    public void undo() {
+        redo.push(undo.pop());
+        textPane.setText(undo.top());
+    }
+
+    public void redo() {
+        textPane.setText(redo.pop());
+    }
 ```
-**Bonus: use the shortcut method to insert a css code block*
-
-### **Insert language block via Toolbar**
-You can insert a code block via the syntax dropdown on the toolbar. It also supports auto-suggest.
-**Try it out:** Highlight then syntax the line of code below to **Javascript** using use the toolbar:
-
-var str = "Hello World";
-
-**Bonus: click on the **</>** icon to insert the currently selected block*
-
-### **Exiting a Code Block**
-To exit a code block, use the shortcut ***Ctrl + Enter*** (***Cmd + Enter*** on Mac) to insert an unstyled line.
-**Try it out:** Exit out of the code block below using the shortcut:
-```javascript
-//focus on me, then use shortcut Ctrl + Enter
-```
-**Bonus: try using the **ctrl + i** shortcut (**cmd + i** for Mac) or the **eraser** tool in the toolbar to unsyntax the code block*
+** Thaycacac@gmail.com*
