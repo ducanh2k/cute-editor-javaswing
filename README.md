@@ -13,11 +13,6 @@ The project incluce:
 •	22 class 
 •	41 image
 
-### **Interface**
-
-![Image](C:\Users\THAYCACAC\Desktop/medley/resources/SJeN4NItZX_BJf18IF-m.jpg)
-
-
 ### **Function**
 - **New File**
 - **Open File**
