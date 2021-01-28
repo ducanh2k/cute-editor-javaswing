@@ -1,0 +1,140 @@
+1.     Raise two main advantages of packet switching, compared to message switching.
+
+2.     Given a 20-bit frame and bit-error-rate p in communication. What is the probability that the frame has no error? What is the probability of 1-bit errors? 
+
+3.     Give two features that the data link layer and transport layer have in common, and further give two features in which they differ.
+
+4.     Which OSI layer is responsible for (a) determining the best path to route packets; (b) providing end-to-end reliable communications; (c) providing node-to-node reliable communications?
+
+5.     How does the network layer in a connection-oriented packet-switching network differ from the network layer in a connectionless packet-switching network?
+
+1.two main advantages of packet switching:
+
+- packets are short, the communication links between the nodes are only allocated to transferring a single message for a short period of time while transmitting each packet.
+
+Longer messages require a series of packets to be sent, but do not require the link to be dedicated between the transmission of each packet.
+
+The implication is that packets belonging to other messages may be sent between the packets of the message being sent from A to D. This provides a much fairer sharing of the resources of each of the links.
+
+- Another benefit of packet switching is known as "pipelining".
+
+Pipelining is visible in the figure above. At the time packet 1 is sent from B to C, packet 2 is sent from A to B;
+
+packet 1 is sent from C to D while packet 2 is sent from B to C, and packet 3 is sent from A to B, and so forth.
+
+This simultaneous use of communications links represents a gain in efficiency, the total delay for transmission across a packet network may be considerably less than for message switching, despite the inclusion of a header in each packet rather than in each message.
+
+2. P = p(1-p)^n-1
+
+=> P = 20(-19)^19 3.
+
+Features they have in common: Both layers can provide recovery form transmission erors , both layers can provide flow control, both layers can support mutiplexing.
+
+features in which they difer; The transport layer is end and involves the interations of peer processes across the network. The data link layer involves the interaction of peer-to-peer processes that are connected directly. In general, the time that elapses in traversing a data link is much smalle the time traversing a network, where packets can become trapped in temporary routing loops.
+
+Consequently, transport layer protocols must be able to deal with out-of-sequence PDUs and a much larger backlog of PDUs than data link layers.
+
+- The data link layer is concerned with framing and the transport layer is not.
+
+- The data link layer may be concerned with medium access control, the transport layer does not have this concern.
+
+4.
+
+(a) Detemining the best path to route packets. -> The network layer
+
+(b) Providing end-to-end comunications with reliable service -> The transport layer
+
+(c) Providing node-to-node communiacation with reliable service -> The data layer
+
+5.
+
+Connection-oriented Service:
+
+- related to the telephone system.
+
+-preferred by long and steady communication.
+
+- necessary and feasible.
+
+- congestion is not possible.
+
+- give the guarantee of reliability.
+
+- In connection-oriented Service, Packets follow the same route.
+
+- require a bandwidth of high range. Connectionless:
+
+- related to the postal system.
+
+- preferred by bursty communication.
+
+- not compulsory and not feasible.
+
+- congestion is possible.
+
+- Packets do not follow the same route.
+
+- require a bandwidth of low range.
+
+PROMPT
+A bit stream 1101011011 is transmitted using the standard CRC method. The polynomial generator is  x+ x + 1. What is the actual bit string transmitted? Show the major steps to your answer.
+
+111(110101101100)
+111
+-_____________________
+1101101100
+111
+-____________________
+11101100
+111
+-___________________
+01100
+111
+________
+10
+transmitted message = 110101101110
+at receiver 
+111(110101101110)
+111
+________________________
+11011001110
+111
+________________
+01110
+111
+_______
+0 0
+hence transmitted message is correct.
+
+PROMPT
+Suppose a IP header consists of four 16-bit words: (11111111 11111111, 11111111 00000000, 11110000 11110000, 11000000 11000000). Please find the Internet checksum for the code. 
+
+1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1
+0 0 0 0 0 0 0 0 
+1 1 1 1 0 0 0 0 
+1 1 1 1 0 0 0 0
+1 1 0 0 0 0 0 0 
+1 1 0 0 0 0 0 0 
+0 0 0 0 0 0 0 1 
+1 0
+0 0 0 0 0 0 1 1
+1 1 1 1 1 1 0 0
+
+PROMPT
+Suppose that a group of computers is connected to an Ethernet LAN. If the computers communicate only with each other, does it make sense to use IP protocol in the computers? Should the computers run TCP directly over Ethernet? How is addressing handled? 
+
+Nope
+
+TCP is an application level protocol,Ip is the transport protocol. TCP and UDP both need IP to function correctly.
+you could make your own TCP like implementation, and you could then create your own transport mechanism, and ultimately your own ardware transmission impleentation, then send/receive TCP like data streams over that, and if you do it correctly you might be able to make it talk to a regular TCP vlient, but from an actual existing implementation, so the answer is no.
+
+PROMPT
+(1)  The figures below show the TCP/UDP communication pattern diagrams. Which diagram works for TCP? Why?
+
+(2)  Fill the missing steps (blank boxes) in both diagrams for TCP/UDP correspondingly.
+
+
+
+idk this question.
